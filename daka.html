@@ -1,0 +1,3523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>芸山杉 · 合伙人出片计划</title>
+<style>
+/* ============ RESET & BASE ============ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;
+  --bg:#f7f4ed;--text:#2c2416;--text2:#8a7e6e;--card:#fff;
+  --primary:#6b8a5e;--primary-dark:#557048;--accent:#c8963e;
+  --border:#e8e2d6;--success:#6b8a5e;--error:#c4645a;
+  --radius:14px;--shadow:0 2px 16px rgba(44,36,22,0.06);
+  --shadow-lg:0 4px 24px rgba(44,36,22,0.10);
+  transition:--primary 0.3s;
+  padding-bottom:80px;
+}
+
+/* ============ HERO ============ */
+.hero{position:relative;width:100%;line-height:0;background:#1a1612}
+.hero img{width:100%;height:auto;display:block}
+.hero-fade{
+  position:absolute;bottom:0;left:0;right:0;height:80px;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0%,rgba(247,244,237,0.4) 40%,var(--bg) 100%);
+}
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;
+  padding:6px 0 env(safe-area-inset-bottom,0);
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:6px 14px;cursor:pointer;border:none;background:none;
+  color:var(--text2);font-size:11px;transition:all 0.2s;
+  -webkit-tap-highlight-color:transparent;position:relative;
+}
+.nav-item.active{color:var(--primary)}
+.nav-item .nav-icon{font-size:22px;line-height:1}
+.nav-item .nav-label{font-size:11px;font-weight:500}
+.nav-item .nav-badge{
+  position:absolute;top:-2px;right:calc(50% - 20px);
+  width:8px;height:8px;border-radius:50%;background:var(--error);
+  display:none;
+}
+
+/* ============ PHONE BIND MODAL ============ */
+.phone-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;
+  background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;
+}
+.phone-overlay.active{display:flex}
+.phone-card{
+  background:var(--card);border-radius:var(--radius);padding:32px 24px;
+  width:calc(100% - 48px);max-width:360px;box-shadow:var(--shadow-lg);
+  text-align:center;
+}
+.phone-card .phone-emoji{font-size:48px;margin-bottom:12px}
+.phone-card .phone-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px}
+.phone-card .phone-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+.phone-card input{
+  width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius);
+  font-size:16px;outline:none;text-align:center;letter-spacing:2px;margin-bottom:16px;
+  transition:border-color 0.2s;
+}
+.phone-card input:focus{border-color:var(--primary)}
+.phone-card input::placeholder{color:#c4bdb0;letter-spacing:1px}
+.phone-btn{
+  width:100%;padding:14px;border:none;border-radius:var(--radius);
+  background:var(--primary);color:#fff;font-size:16px;font-weight:600;
+  cursor:pointer;letter-spacing:2px;
+}
+.phone-btn:active{opacity:0.9}
+.phone-skip{
+  margin-top:12px;font-size:12px;color:var(--text2);cursor:pointer;
+  background:none;border:none;text-decoration:underline;
+}
+
+/* ============ MAIN CONTENT ============ */
+.main{padding:0 20px 48px;max-width:480px;margin:0 auto}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* Section header */
+.section-header{text-align:center;padding:16px 0 4px}
+.section-header .plan-name{
+  font-size:22px;font-weight:700;letter-spacing:3px;color:var(--text);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.section-header .plan-name .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.section-header .tagline{font-size:13px;color:var(--text2);margin-top:4px}
+
+/* Step indicator */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;padding:20px 0}
+.step-item{display:flex;align-items:center;gap:8px}
+.step-num{
+  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;border:2px solid var(--border);color:var(--text2);
+  background:var(--card);transition:all 0.3s;
+}
+.step-item.active .step-num{background:var(--primary);border-color:var(--primary);color:#fff}
+.step-item.done .step-num{background:var(--success);border-color:var(--success);color:#fff}
+.step-label{font-size:11px;color:var(--text2);display:none}
+.step-line{width:30px;height:1px;background:var(--border);margin:0 4px;transition:background 0.3s}
+.step-item.done+.step-line{background:var(--success)}
+
+/* ============ STEP PANELS ============ */
+.step-panel{display:none}
+.step-panel.active{display:block}
+.template-grid{display:flex;flex-direction:column;gap:10px}
+.template-card{
+  background:var(--card);border-radius:var(--radius);padding:18px 16px;
+  box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;
+  transition:all 0.2s;display:flex;align-items:center;gap:14px;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.template-card:active{transform:scale(0.98)}
+.template-card.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(107,138,94,0.12),var(--shadow-lg)}
+.template-emoji{font-size:36px;line-height:1;flex-shrink:0}
+.template-info{flex:1;min-width:0}
+.template-name{font-size:16px;font-weight:600;color:var(--text)}
+.template-desc{font-size:12px;color:var(--text2);margin-top:2px}
+.template-meta{font-size:11px;color:var(--text2);margin-top:4px;display:flex;gap:12px}
+.template-badge{
+  font-size:11px;padding:2px 8px;border-radius:10px;
+  background:rgba(107,138,94,0.1);color:var(--primary);white-space:nowrap;
+}
+.template-badge.has-demo{cursor:pointer;background:rgba(200,150,62,0.15);color:var(--accent)}
+.template-badge.has-demo:active{opacity:0.7}
+
+/* Demo video modal */
+.demo-modal{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:250;
+  background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;
+}
+.demo-modal.active{display:flex}
+.demo-modal-close{
+  position:absolute;top:16px;right:16px;z-index:1;
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.2);
+  color:#fff;font-size:20px;border:none;cursor:pointer;line-height:36px;text-align:center;
+}
+.demo-modal video{
+  max-width:90vw;max-height:80vh;border-radius:12px;background:#000;
+}
+.btn-confirm{
+  width:100%;margin-top:16px;padding:14px;border:none;border-radius:var(--radius);
+  background:var(--primary);color:#fff;font-size:16px;font-weight:600;cursor:pointer;
+  transition:all 0.2s;letter-spacing:2px;
+}
+.btn-confirm:disabled{opacity:0.4;cursor:not-allowed}
+.btn-confirm:not(:disabled):active{opacity:0.85;transform:scale(0.98)}
+
+.upload-header{padding:8px 0 12px;text-align:center}
+.selected-tpl{font-size:13px;color:var(--text2)}
+.selected-tpl strong{color:var(--text);font-weight:600}
+
+.upload-slots{display:flex;flex-direction:column;gap:10px}
+.upload-slot{
+  background:var(--card);border-radius:var(--radius);padding:20px 16px;
+  box-shadow:var(--shadow);border:2px dashed var(--border);cursor:pointer;
+  transition:all 0.2s;text-align:center;position:relative;overflow:hidden;
+}
+.upload-slot:active{background:rgba(107,138,94,0.04)}
+.upload-slot.filled{border-color:var(--success);border-style:solid}
+.upload-slot input{position:absolute;opacity:0;width:100%;height:100%;top:0;left:0;cursor:pointer;z-index:1}
+.slot-icon{font-size:32px;margin-bottom:4px;position:relative;z-index:0}
+.slot-label{font-size:15px;font-weight:600;color:var(--text);position:relative;z-index:0}
+.slot-tip{font-size:12px;color:var(--text2);margin-top:4px;position:relative;z-index:0}
+.slot-status{display:none;font-size:12px;color:var(--success);margin-top:6px;position:relative;z-index:0}
+.upload-slot.filled .slot-status{display:block}
+.upload-slot.filled .slot-tip{display:none}
+
+/* Upload slot: delete button */
+.slot-actions{position:absolute;top:6px;right:6px;display:none;z-index:5}
+.upload-slot.filled .slot-actions{display:block}
+.slot-delete{
+  width:28px;height:28px;border-radius:50%;border:1px solid var(--error);
+  background:rgba(255,255,255,0.95);color:var(--error);font-size:14px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;line-height:1;
+}
+.slot-delete:active{background:var(--error);color:#fff;transform:scale(0.9)}
+
+/* Slot video preview */
+.slot-video-preview{
+  display:none;margin-top:10px;border-radius:10px;overflow:hidden;
+  width:120px;height:90px;margin-left:auto;margin-right:auto;
+  background:#000;position:relative;cursor:default;box-shadow:0 2px 8px rgba(0,0,0,0.12);
+}
+.upload-slot.filled .slot-video-preview{display:block}
+.slot-video-preview video{
+  width:100%;height:100%;object-fit:cover;pointer-events:none;
+}
+.slot-video-preview img{
+  width:100%;height:100%;object-fit:cover;display:none;
+}
+.slot-video-preview .play-badge{
+  position:absolute;bottom:2px;right:2px;
+  background:rgba(0,0,0,0.6);color:#fff;font-size:9px;
+  padding:1px 5px;border-radius:4px;
+}
+
+/* Back button (bottom-left) */
+.back-btn-bottom{
+  display:inline-flex;align-items:center;gap:4px;margin-top:16px;
+  padding:8px 14px;border:none;border-radius:20px;
+  background:rgba(107,138,94,0.08);color:var(--primary);
+  font-size:13px;font-weight:500;cursor:pointer;
+  transition:all 0.2s;-webkit-tap-highlight-color:transparent;
+}
+.back-btn-bottom:active{background:rgba(107,138,94,0.18);transform:scale(0.96)}
+
+/* BGM section on result page */
+.bgm-section{margin-top:14px;text-align:center}
+.bgm-label{font-size:13px;color:var(--text2);margin-bottom:8px}
+.bgm-buttons{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.bgm-btn{
+  padding:8px 14px;border:1.5px solid var(--border);border-radius:20px;
+  background:var(--card);color:var(--text);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all 0.15s;font-family:inherit;
+  -webkit-tap-highlight-color:transparent;
+}
+.bgm-btn:active{transform:scale(0.95)}
+.bgm-btn.selected{border-color:var(--primary);background:rgba(107,138,94,0.08);color:var(--primary)}
+.bgm-btn.playing{background:var(--primary);color:#fff;border-color:var(--primary)}
+.bgm-btn .play-indicator{display:none;margin-left:4px}
+.bgm-btn.playing .play-indicator{display:inline}
+
+/* ============ ACTION SHEET (Camera / Album Picker) ============ */
+.act-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;
+  background:rgba(0,0,0,0.4);display:none;
+  align-items:flex-end;justify-content:center;
+}
+.act-overlay.active{display:flex}
+.act-sheet{
+  background:var(--card);border-radius:16px 16px 0 0;
+  width:100%;max-width:480px;padding:16px 20px env(safe-area-inset-bottom,16px);
+  animation:actUp 0.2s ease-out;
+}
+@keyframes actUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.act-title{font-size:14px;font-weight:600;color:var(--text2);text-align:center;margin-bottom:12px}
+.act-btn{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:14px 16px;border:none;border-radius:12px;
+  background:var(--bg);margin-bottom:8px;
+  font-size:15px;font-weight:500;color:var(--text);cursor:pointer;
+  transition:all 0.15s;
+}
+.act-btn:active{background:var(--border);transform:scale(0.98)}
+.act-btn .act-icon{font-size:24px;line-height:1}
+.act-cancel{
+  display:block;width:100%;padding:14px;border:none;border-radius:12px;
+  background:var(--bg);color:var(--text2);font-size:15px;cursor:pointer;
+  margin-top:4px;transition:all 0.15s;
+}
+.act-cancel:active{background:var(--border)}
+
+.progress-bar{
+  display:none;margin-top:8px;height:4px;border-radius:2px;
+  background:var(--border);overflow:hidden;
+}
+.progress-bar.active{display:block}
+.progress-bar .fill{height:100%;width:0;background:var(--primary);transition:width 0.2s}
+
+.processing-panel{text-align:center;padding:40px 0}
+.spinner{
+  width:48px;height:48px;margin:0 auto 20px;
+  border:3px solid var(--border);border-top-color:var(--primary);
+  border-radius:50%;animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.processing-text{font-size:18px;font-weight:600;color:var(--text)}
+.processing-sub{font-size:13px;color:var(--text2);margin-top:8px}
+
+.result-panel{text-align:center}
+.done-icon{font-size:48px}
+.result-title{font-size:18px;font-weight:600;color:var(--text);margin:8px 0 16px}
+#result-video{width:100%;border-radius:var(--radius);margin-bottom:16px;background:#000}
+.btn-download{
+  display:block;width:100%;padding:14px;margin:8px 0;
+  background:var(--primary);color:#fff;border-radius:var(--radius);
+  text-decoration:none;font-weight:600;font-size:16px;letter-spacing:2px;
+}
+.caption-box{
+  background:var(--card);border-radius:var(--radius);padding:16px;
+  margin:12px 0;box-shadow:var(--shadow);
+}
+.caption-label{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px}
+.caption-label .lock{font-size:11px;color:var(--text2);font-weight:400}
+.caption-textarea{
+  width:100%;height:100px;padding:10px;border:1px solid var(--border);
+  border-radius:10px;font-size:13px;resize:none;background:var(--bg);
+  color:var(--text);line-height:1.8;
+}
+.btn-copy{
+  margin-top:8px;padding:8px 20px;border:1px solid var(--primary);
+  border-radius:20px;background:transparent;color:var(--primary);
+  font-size:14px;cursor:pointer;
+}
+/* 激励横条 */
+.incentive-strip{
+  margin-top:16px;padding:14px 16px;border-radius:14px;
+  background:linear-gradient(135deg,#fdf8f0,#f9f0e3);
+  border:1px solid #eddcc8;
+  box-shadow:0 1px 6px rgba(139,105,60,0.06);
+}
+.incentive-strip .is-headline{
+  font-size:12.5px;color:#8b6b3e;text-align:center;margin-bottom:12px;
+  font-weight:500;letter-spacing:0.8px;
+}
+.incentive-strip .is-headline em{font-style:normal;color:#c8963e;font-weight:700}
+.incentive-strip .is-row{
+  display:flex;align-items:stretch;gap:0;
+}
+.incentive-strip .is-item{
+  flex:1;text-align:center;padding:4px 6px;
+  border-right:1px solid #e8d5b8;
+}
+.incentive-strip .is-item:last-child{border-right:none}
+.incentive-strip .is-amount{
+  font-size:20px;font-weight:800;color:#c8963e;line-height:1.2;
+}
+.incentive-strip .is-label{
+  font-size:11px;color:#7c5e3a;margin-top:3px;line-height:1.4;font-weight:500;
+}
+
+/* ============ COUPON ON RESULT ============ */
+.coupon-result{
+  margin-top:12px;padding:16px;border-radius:var(--radius);
+  background:linear-gradient(135deg,rgba(107,138,94,0.08),rgba(107,138,94,0.02));
+  border:1px solid rgba(107,138,94,0.2);
+}
+.coupon-result .coupon-icon{font-size:28px}
+.coupon-result .coupon-title{font-size:14px;font-weight:600;color:var(--text);margin:4px 0}
+.coupon-result .coupon-code{
+  font-size:22px;font-weight:800;letter-spacing:3px;color:var(--primary);
+  background:rgba(0,0,0,0.04);padding:6px 12px;border-radius:8px;
+  display:inline-block;margin:6px 0;
+}
+.coupon-result .coupon-desc{font-size:12px;color:var(--text2)}
+
+/* ============ 我的出片 ============ */
+.user-card{
+  background:var(--card);border-radius:var(--radius);padding:24px 20px;
+  box-shadow:var(--shadow);text-align:center;margin-bottom:16px;
+}
+.user-avatar{
+  width:72px;height:72px;border-radius:50%;margin:0 auto 12px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:#fff;font-size:32px;display:flex;align-items:center;justify-content:center;
+}
+.user-info-name{font-size:18px;font-weight:700;color:var(--text)}
+.user-info-phone{font-size:12px;color:var(--text2);margin-top:2px}
+.level-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 14px;border-radius:14px;font-size:13px;font-weight:600;
+  margin-top:10px;
+}
+.level-suren{background:rgba(139,163,124,0.12);color:#7a8e6e}
+.level-changke{background:rgba(200,150,62,0.12);color:#b8860b}
+.level-daren{background:rgba(192,100,90,0.12);color:#b84a3e}
+.level-hehuoren{background:linear-gradient(135deg,rgba(200,150,62,0.2),rgba(192,100,90,0.2));color:#8b4513}
+
+.stats-row{display:flex;justify-content:space-around;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.stat-item{text-align:center}
+.stat-num{font-size:22px;font-weight:800;color:var(--text)}
+.stat-label{font-size:11px;color:var(--text2);margin-top:2px}
+
+.section-title{
+  font-size:16px;font-weight:700;color:var(--text);
+  padding:8px 0 12px;display:flex;align-items:center;gap:6px;
+}
+
+/* Coupon list */
+.coupon-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.coupon-item{
+  background:var(--card);border-radius:var(--radius);padding:16px;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;
+  border-left:4px solid var(--primary);
+}
+.coupon-item.used{opacity:0.5;border-left-color:var(--border)}
+.coupon-item .c-amount{font-size:28px;font-weight:800;color:var(--accent);flex-shrink:0;min-width:60px}
+.coupon-item .c-info{flex:1}
+.coupon-item .c-code{font-size:13px;font-weight:600;color:var(--text);letter-spacing:1px}
+.coupon-item .c-expire{font-size:11px;color:var(--text2);margin-top:2px}
+.coupon-item .c-status{font-size:12px;padding:2px 10px;border-radius:10px}
+.c-tag-valid{background:rgba(107,138,94,0.1);color:var(--success)}
+.c-tag-used{background:rgba(0,0,0,0.06);color:var(--text2)}
+
+/* Video history */
+.history-list{display:flex;flex-direction:column;gap:10px}
+.history-item{
+  background:var(--card);border-radius:var(--radius);padding:14px;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;
+}
+.history-item .h-emoji{font-size:24px;flex-shrink:0}
+.history-item .h-info{flex:1}
+.history-item .h-tpl{font-size:14px;font-weight:600;color:var(--text)}
+.history-item .h-time{font-size:11px;color:var(--text2);margin-top:2px}
+.history-item .h-coupon{font-size:12px;color:var(--accent);font-weight:600}
+
+.empty-state{text-align:center;padding:40px 0;color:var(--text2)}
+.empty-state .empty-emoji{font-size:48px;margin-bottom:8px}
+.empty-state .empty-text{font-size:14px}
+
+/* Add phone btn */
+.add-phone-btn{
+  display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:6px 16px;
+  border:1px solid var(--border);border-radius:20px;font-size:12px;
+  color:var(--text2);background:transparent;cursor:pointer;
+}
+
+/* ============ 服务 TAB ============ */
+.service-grid{display:flex;flex-direction:column;gap:12px}
+
+/* Call Waiter card */
+.call-card{
+  background:var(--card);border-radius:var(--radius);padding:28px 20px;
+  box-shadow:var(--shadow);text-align:center;
+}
+.call-card .call-icon{font-size:48px;margin-bottom:8px}
+.call-card .call-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px}
+.call-card .call-desc{font-size:13px;color:var(--text2);margin-bottom:18px}
+.call-btn{
+  display:inline-block;padding:14px 40px;
+  background:var(--primary);color:#fff;border:none;border-radius:28px;
+  font-size:16px;font-weight:600;cursor:pointer;letter-spacing:2px;
+  transition:all 0.2s;
+}
+.call-btn:active{opacity:0.85;transform:scale(0.96)}
+.call-btn:disabled{opacity:0.5;cursor:not-allowed}
+.call-done{
+  display:none;padding:14px 0;font-size:16px;font-weight:600;color:var(--success);
+}
+.table-badge{
+  display:inline-block;margin:8px 0;
+  padding:6px 16px;background:rgba(107,138,94,0.1);
+  border-radius:20px;font-size:14px;font-weight:600;color:var(--primary);
+}
+.call-type-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  margin:12px 0 16px;
+}
+.ct-btn{
+  padding:12px 8px;border:2px solid var(--border);
+  border-radius:12px;background:var(--card);
+  font-size:12px;color:var(--text);cursor:pointer;
+  transition:all 0.2s;line-height:1.5;text-align:center;
+}
+.ct-btn:active{transform:scale(0.95)}
+.ct-btn.selected{
+  border-color:var(--primary);background:rgba(107,138,94,0.08);
+  color:var(--primary);font-weight:600;
+}
+.ct-btn.selected::after{content:' ✓';color:var(--primary)}
+
+/* Feedback card */
+.feedback-card{
+  background:var(--card);border-radius:var(--radius);padding:20px;
+  box-shadow:var(--shadow);
+}
+.feedback-card .fb-header{
+  text-align:center;margin-bottom:16px;
+}
+.feedback-card .fb-icon{font-size:36px;margin-bottom:4px}
+.feedback-card .fb-title{font-size:16px;font-weight:600;color:var(--text)}
+.feedback-card .fb-sub{font-size:12px;color:var(--text2)}
+.fb-emoji-row{
+  display:flex;justify-content:space-around;margin-bottom:14px;
+}
+.fb-emoji-btn{
+  font-size:32px;cursor:pointer;transition:transform 0.2s;
+  background:none;border:none;line-height:1;padding:4px;
+  -webkit-tap-highlight-color:transparent;
+}
+.fb-emoji-btn:active{transform:scale(1.3)}
+.fb-emoji-btn.selected{transform:scale(1.2)}
+.fb-textarea{
+  width:100%;height:80px;padding:12px;border:1px solid var(--border);
+  border-radius:10px;font-size:14px;resize:none;background:var(--bg);
+  font-family:inherit;margin-bottom:10px;
+}
+.fb-textarea:focus{outline:none;border-color:var(--primary)}
+.fb-textarea::placeholder{color:#c4bdb0;font-size:13px}
+.fb-submit-btn{
+  width:100%;padding:12px;border:none;border-radius:var(--radius);
+  background:var(--primary);color:#fff;font-size:15px;font-weight:600;cursor:pointer;
+}
+.fb-submit-btn:active{opacity:0.85}
+.fb-success{text-align:center;padding:12px;color:var(--success);font-size:14px;display:none}
+
+/* Info card */
+.info-card{
+  background:var(--card);border-radius:var(--radius);padding:18px 16px;
+  box-shadow:var(--shadow);
+}
+.info-row{
+  display:flex;align-items:center;gap:12px;padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+.info-row:last-child{border-bottom:none}
+.info-row .info-icon{font-size:20px;width:28px;text-align:center;flex-shrink:0}
+.info-row .info-label{font-size:13px;color:var(--text2);min-width:48px}
+.info-row .info-value{font-size:14px;color:var(--text);flex:1;word-break:break-all}
+.info-row .info-copy{
+  padding:4px 12px;border:1px solid var(--border);border-radius:12px;
+  font-size:11px;color:var(--text2);background:transparent;cursor:pointer;
+  white-space:nowrap;
+}
+
+/* Toast & overlay */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:300;
+  background:rgba(44,36,22,0.88);color:#fff;padding:10px 24px;
+  border-radius:20px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;
+}
+.toast.show{opacity:1}
+.toast.error{background:rgba(196,100,90,0.92)}
+.toast.success{background:rgba(107,138,94,0.92)}
+
+.uploading-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:150;
+  background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;
+}
+.uploading-overlay.active{display:flex}
+.uploading-overlay .card{
+  background:var(--card);border-radius:var(--radius);padding:32px 40px;text-align:center;
+}
+.uploading-overlay .pct{font-size:32px;font-weight:700;color:var(--text)}
+
+/* History feedback list */
+.fb-history-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.fb-history-item{
+  background:var(--card);border-radius:10px;padding:12px;
+  box-shadow:var(--shadow);font-size:13px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.fb-history-item .fb-h-emoji{font-size:20px;flex-shrink:0}
+
+    /* ───── 社交案例展示 ───── */
+    .social-section { margin: 0 0 16px 0; }
+    
+/* ============ 游戏Tab ============ */
+.game-room-card {
+  background: #fff; border-radius: 16px; padding: 20px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06); margin-bottom: 16px; text-align: center;
+}
+.game-room-card h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+.game-room-card .room-desc { font-size: 13px; color: var(--text2); margin-bottom: 16px; }
+
+.room-code-display {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: #fef5f3; border: 2px dashed var(--primary); border-radius: 12px;
+  padding: 14px; margin-bottom: 16px;
+}
+.room-code-display .code-label { font-size: 13px; color: var(--text2); }
+.room-code-display .code-num {
+  font-size: 36px; font-weight: 800; color: var(--primary);
+  letter-spacing: 8px; font-family: monospace;
+  user-select: all;
+}
+.room-code-display .code-copy-btn {
+  background: var(--primary); color: #fff; border: none;
+  border-radius: 8px; padding: 6px 14px; font-size: 12px; cursor: pointer;
+}
+
+.players-grid {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 20px;
+}
+.player-chip {
+  background: #fdf2ee; border-radius: 12px; padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px; font-size: 14px;
+}
+.player-chip .chip-emoji { font-size: 20px; }
+.player-chip .chip-name { font-weight: 600; color: var(--text); }
+.player-chip .chip-you { font-size: 10px; background: var(--primary); color: #fff; padding: 2px 6px; border-radius: 6px; }
+
+.game-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;
+}
+.game-btn {
+  background: #fff; border: 2px solid var(--border); border-radius: 14px;
+  padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.15s;
+}
+.game-btn:active { transform: scale(0.96); border-color: var(--primary); }
+.game-btn .game-emoji { font-size: 36px; margin-bottom: 6px; }
+.game-btn .game-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.game-btn .game-desc { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+.btn-primary {
+  background: var(--primary); color: #fff; border: none; border-radius: 12px;
+  padding: 14px; font-size: 16px; font-weight: 700; width: 100%; cursor: pointer;
+}
+.btn-outline {
+  background: #fff; color: var(--primary); border: 2px solid var(--primary);
+  border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 700; width: 100%; cursor: pointer;
+}
+.btn-sm { padding: 10px 20px; font-size: 14px; width: auto; border-radius: 10px; }
+
+.input-room {
+  width: 100%; border: 2px solid var(--border); border-radius: 12px;
+  padding: 14px; font-size: 24px; text-align: center; letter-spacing: 8px;
+  font-family: monospace; font-weight: 700; margin-bottom: 12px;
+  outline: none; -webkit-appearance: none;
+}
+.input-room:focus { border-color: var(--primary); }
+
+/* Dice */
+.dice-area { text-align: center; padding: 20px 0; }
+.dice-display {
+  width: 100px; height: 100px; background: #fff; border-radius: 24px;
+  margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 56px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+.dice-display.rolling { animation: diceShake 0.6s ease-in-out; }
+@keyframes diceShake {
+  0%,100% { transform: rotate(0deg); }
+  25% { transform: rotate(-20deg) scale(1.1); }
+  75% { transform: rotate(20deg) scale(1.1); }
+}
+.dice-result-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 12px; }
+.dice-player-result {
+  background: #fff; border-radius: 12px; padding: 10px 14px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06); text-align: center; min-width: 70px;
+}
+.dice-player-result .dr-name { font-size: 12px; color: var(--text2); }
+.dice-player-result .dr-val { font-size: 28px; font-weight: 800; }
+.dice-player-result.loser { border: 2px solid var(--primary); background: #fef5f3; }
+
+/* Wheel */
+.wheel-area { text-align: center; padding: 10px 0; }
+.wheel-visual {
+  width: 180px; height: 180px; border-radius: 50%; margin: 0 auto 20px;
+  background: conic-gradient(
+    #ff6b6b 0deg 60deg, #ffd93d 60deg 120deg, #6bcb77 120deg 180deg,
+    #4d96ff 180deg 240deg, #ff6b6b 240deg 300deg, #ffd93d 300deg 360deg
+  );
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12); position: relative;
+  transition: transform 3s cubic-bezier(0.2,0.8,0.3,1);
+}
+.wheel-visual::after {
+  content: '▼'; position: absolute; top: -16px; left: 50%;
+  transform: translateX(-50%); font-size: 24px; color: var(--primary);
+}
+.wheel-visual.spinning { transform: rotate(1800deg); }
+.wheel-result { font-size: 16px; font-weight: 700; margin-top: 8px; }
+.wheel-target { font-size: 14px; color: var(--text2); margin-top: 4px; }
+
+/* Gomoku */
+.gomoku-area { text-align: center; }
+.gomoku-board {
+  display: grid; grid-template-columns: repeat(15, 1fr);
+  width: 100%; max-width: 320px; margin: 0 auto 16px;
+  background: #e8c97a; border-radius: 8px; padding: 2px;
+  aspect-ratio: 1;
+}
+.gomoku-cell {
+  aspect-ratio: 1; background: #e8c97a; border: 0.5px solid #c4a345;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; cursor: pointer; position: relative;
+}
+.gomoku-cell.occupied { cursor: default; }
+.gomoku-cell.last-move::after {
+  content: ''; position: absolute; width: 6px; height: 6px;
+  background: #ff4444; border-radius: 50%; top: 2px; right: 2px;
+}
+
+.gomoku-turn { font-size: 14px; color: var(--text2); margin-bottom: 8px; }
+
+/* RPS */
+.rps-area { text-align: center; padding: 20px 0; }
+.rps-choice { font-size: 60px; margin: 16px 0; }
+.rps-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.rps-btn {
+  width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--border);
+  background: #fff; font-size: 36px; cursor: pointer; transition: all 0.15s;
+}
+.rps-btn:active { transform: scale(0.9); border-color: var(--primary); }
+.rps-vs { font-size: 20px; font-weight: 700; color: var(--text); margin: 12px 0; }
+
+/* common game UI */
+.game-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.game-header .back-btn {
+  background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text2);
+}
+.game-header .game-round { font-size: 13px; color: var(--text2); }
+.punishment-card {
+  background: linear-gradient(135deg, #fef5f3, #fff5f5); border-radius: 14px;
+  padding: 16px; margin-top: 16px; text-align: center; border: 1px solid #fadcd9;
+}
+.punishment-card .punish-label { font-size: 12px; color: var(--primary); margin-bottom: 4px; }
+.punishment-card .punish-text { font-size: 16px; font-weight: 700; color: var(--text); }
+.punishment-card .punish-reward { font-size: 14px; color: #4caf50; margin-top: 6px; font-weight: 600; }
+
+.join-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.join-section .or-divider {
+  text-align: center; font-size: 13px; color: var(--text2); margin: 8px 0;
+}
+
+.stats-banner {
+      display: flex; align-items: center; justify-content: center; 
+      flex-wrap: wrap; gap: 4px 12px;
+      padding: 10px 12px; margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff7ed 0%, #fff1f2 100%);
+      border-radius: 12px; font-size: 12px; color: #7c3a3a;
+      border: 1px solid #fde8e8;
+    }
+    .stats-banner .stat-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .stats-banner .stat-val { font-weight: 700; font-size: 14px; color: #d4786e; }
+    .stats-banner .stat-divider { color: #e5c5c5; }
+
+    .cases-scroll {
+      display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch; padding: 0 0 8px 0;
+      scrollbar-width: none;
+    }
+    .cases-scroll::-webkit-scrollbar { display: none; }
+
+    .case-card {
+      flex: 0 0 auto; width: 140px; scroll-snap-align: start;
+      border-radius: 12px; overflow: hidden; position: relative;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      background: #fff; cursor: default;
+    }
+    .case-img {
+      width: 100%; height: 180px; object-fit: cover; display: block;
+    }
+    .case-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      padding: 28px 10px 8px; color: #fff;
+    }
+    .case-name { font-size: 13px; font-weight: 600; line-height: 1.2; }
+    .case-stats { font-size: 11px; opacity: 0.9; margin-top: 2px; }
+    .case-quote { 
+      font-size: 10px; opacity: 0.8; margin-top: 2px; 
+      font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* ───── 单人小游戏 ───── */
+    .solo-game-tabs {
+      display: flex; gap: 8px; margin-bottom: 16px; justify-content: center;
+    }
+    .solo-game-tab {
+      padding: 8px 20px; border-radius: 20px; border: 1.5px solid var(--border);
+      background: var(--card); font-size: 13px; font-weight: 600; color: var(--text2);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .solo-game-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .solo-game-tab:active { transform: scale(0.95); }
+
+    .solo-game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .solo-game-btn {
+      background: var(--card); border: 2px solid var(--border-light); border-radius: 16px;
+      padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.2s;
+    }
+    .solo-game-btn:active { transform: scale(0.96); border-color: var(--primary); }
+    .solo-game-btn .sg-emoji { font-size: 40px; margin-bottom: 6px; }
+    .solo-game-btn .sg-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .solo-game-btn .sg-desc { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+    /* Mini game canvas area */
+    .minigame-canvas-wrapper {
+      position: relative; width: 100%; margin: 0 auto;
+      background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .minigame-canvas-wrapper .mg-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-bottom: 1px solid var(--border-light);
+    }
+    .minigame-canvas-wrapper .mg-back {
+      background: none; border: none; font-size: 18px; color: var(--text2); cursor: pointer; padding: 4px;
+    }
+    .minigame-canvas-wrapper .mg-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .minigame-canvas-wrapper .mg-score { font-size: 13px; color: var(--text2); }
+    .minigame-canvas-wrapper .mg-score span { font-weight: 800; color: var(--primary); font-size: 18px; }
+
+    .mg-body { padding: 16px; display: flex; flex-direction: column; align-items: center; }
+    .mg-canvas { display: block; margin: 0 auto; border-radius: 8px; background: #1a1a2e; }
+
+    .mg-controls { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
+    .mg-btn {
+      padding: 10px 24px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; letter-spacing: 1px;
+    }
+    .mg-btn:active { transform: scale(0.95); }
+    .mg-btn-primary { background: var(--primary); color: #fff; }
+    .mg-btn-secondary { background: var(--bg2); color: var(--text); }
+    .mg-btn-danger { background: var(--error); color: #fff; }
+
+    .mg-swipe-hint {
+      font-size: 11px; color: var(--text3); margin-top: 8px; text-align: center;
+    }
+
+    .mg-game-over {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; background: rgba(0,0,0,0.7);
+      border-radius: var(--radius); z-index: 5;
+    }
+    .mg-game-over .go-emoji { font-size: 48px; margin-bottom: 8px; }
+    .mg-game-over .go-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .mg-game-over .go-score { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 16px; }
+    .mg-game-over .go-btn {
+      padding: 10px 28px; border: none; border-radius: 24px;
+      background: var(--primary); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+
+    /* 2048 specific */
+    .grid-2048 {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+      width: 240px; height: 240px; background: #bbada0; border-radius: 6px; padding: 4px;
+    }
+    .cell-2048 {
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; border-radius: 4px; font-size: 24px;
+      background: rgba(238,228,218,0.35); transition: all 0.1s;
+    }
+    .cell-2048.t2 { background: #eee4da; color: #776e65; }
+    .cell-2048.t4 { background: #ede0c8; color: #776e65; }
+    .cell-2048.t8 { background: #f2b179; color: #f9f6f2; }
+    .cell-2048.t16 { background: #f59563; color: #f9f6f2; }
+    .cell-2048.t32 { background: #f67c5f; color: #f9f6f2; }
+    .cell-2048.t64 { background: #f65e3b; color: #f9f6f2; }
+    .cell-2048.t128 { background: #edcf72; color: #f9f6f2; font-size: 18px; }
+    .cell-2048.t256 { background: #edcc61; color: #f9f6f2; font-size: 18px; }
+    .cell-2048.t512 { background: #edc850; color: #f9f6f2; font-size: 18px; }
+    .cell-2048.t1024 { background: #edc53f; color: #f9f6f2; font-size: 14px; }
+    .cell-2048.t2048 { background: #edc22e; color: #f9f6f2; font-size: 14px; }
+    .cell-2048.t4096 { background: #3c3a32; color: #f9f6f2; font-size: 14px; }
+    .cell-2048.t8192 { background: #3c3a32; color: #f9f6f2; font-size: 14px; }
+
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <img src="img/1_poster_web.jpg" alt="芸山杉" loading="eager">
+  <div class="hero-fade"></div>
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-tab="daka" onclick="switchTab('daka')">
+    <span class="nav-icon">🎬</span><span class="nav-label">出片</span>
+  </button>
+  <button class="nav-item" data-tab="service" onclick="switchTab('service')">
+    <span class="nav-icon">🛎️</span><span class="nav-label">服务</span>
+  </button>
+
+  <button class="nav-item" data-tab="game" onclick="switchTab('game')">
+    <span class="nav-icon">🎮</span><span class="nav-label">等位游戏</span>
+  </button>
+
+  <button class="nav-item" data-tab="my" onclick="switchTab('my')">
+    <span class="nav-icon">👤</span><span class="nav-label">我的</span>
+    <span class="nav-badge" id="nav-badge"></span>
+  </button>
+</nav>
+
+<!-- ============ PHONE BIND MODAL ============ -->
+<div class="phone-overlay" id="phone-overlay">
+  <div class="phone-card">
+    <div class="phone-emoji">📱</div>
+    <div class="phone-title">绑定手机号</div>
+    <div class="phone-sub">记录出片历史，自动发券</div>
+    <input type="tel" id="phone-number" placeholder="输入手机号" maxlength="11">
+    <button class="phone-btn" onclick="doBindPhone()">确认绑定</button>
+    <button class="phone-skip" onclick="skipBind()">暂不绑定，先出片</button>
+  </div>
+</div>
+
+<!-- ============ TAB: 出片 ============ -->
+<div class="tab-content active" id="tab-daka">
+<div class="main">
+  <div class="section-header">
+    <div class="plan-name"><span class="dot"></span>合伙人出片计划<span class="dot"></span></div>
+    <div class="tagline" id="store-tagline">三步出片 · 现金立返</div>
+  </div>
+
+  <div class="incentive-strip">
+      <div class="is-headline"><em>拍视频发抖音</em>，三重奖励等你拿</div>
+      <div class="is-row">
+        <div class="is-item">
+          <div class="is-amount">¥8</div>
+          <div class="is-label">发布即得<br>现金立返</div>
+        </div>
+        <div class="is-item">
+          <div class="is-amount">¥12</div>
+          <div class="is-label">50点赞互动<br>额外奖励</div>
+        </div>
+        <div class="is-item">
+          <div class="is-amount">15%</div>
+          <div class="is-label">推荐消费<br>佣金分成</div>
+        </div>
+      </div>
+    </div>
+
+  <div class="steps">
+    <div class="step-item done" data-step="1"><span class="step-num">1</span><span class="step-label">选模板</span></div>
+    <div class="step-line"></div>
+    <div class="step-item" data-step="2"><span class="step-num">2</span><span class="step-label">拍素材</span></div>
+    <div class="step-line"></div>
+    <div class="step-item" data-step="3"><span class="step-num">3</span><span class="step-label">AI出片</span></div>
+    <div class="step-line"></div>
+    <div class="step-item" data-step="4"><span class="step-num">4</span><span class="step-label">下载发布</span></div>
+  </div>
+
+  <!-- Step 1: Template -->
+  <div class="step-panel active" id="panel-template">
+    <div class="template-grid" id="template-list"></div>
+    <button class="btn-confirm" id="btn-confirm-template" disabled>确认选择 → 开始拍摄</button>
+    <!-- 社交案例展示 -->
+    <div class="social-section" id="social-section" style="display:none">
+      <div class="stats-banner" id="stats-banner"></div>
+      <div class="cases-scroll" id="cases-scroll"></div>
+    </div>
+  </div>
+
+  <!-- Step 2: Upload -->
+  <div class="step-panel" id="panel-upload">
+    <div class="upload-header">
+      <p class="selected-tpl">已选模板：<strong id="selected-tpl-name"></strong></p>
+    </div>
+    <div class="upload-slots" id="upload-slots"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
+      <button class="back-btn-bottom" onclick="goBackToStep1()">← 返回</button>
+      <button class="btn-confirm" id="btn-start-merge" disabled style="margin-top:0;width:auto;padding:14px 24px;flex:1;margin-left:12px">提交素材 · AI自动出片 ✨</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Processing -->
+  <div class="step-panel" id="panel-processing">
+    <div class="processing-panel">
+      <div class="spinner"></div>
+      <p class="processing-text">AI 正在为你剪辑...</p>
+      <p class="processing-sub" id="processing-sub">正在拼接素材，预计1-2分钟</p>
+    </div>
+    <button class="back-btn-bottom" onclick="switchStep(2)" style="margin-top:12px">← 返回</button>
+  </div>
+
+  <!-- Step 4: Download -->
+  <div class="step-panel" id="panel-download">
+    <div class="result-panel">
+      <div class="done-icon">✅</div>
+      <p class="result-title">你的专属大片已就绪！</p>
+      <video id="result-video" controls playsinline></video>
+      <a class="btn-download" id="btn-download" download>💾 下载视频</a>
+      <div class="bgm-section">
+        <div class="bgm-label">🎵 搭配背景音乐 <span style="font-size:11px;color:var(--text2)">（播放时同步）</span></div>
+        <div class="bgm-buttons">
+          <button class="bgm-btn" onclick="toggleBGM('bestie', this)" data-bgm="bestie">🥂 闺蜜碰杯</button>
+          <button class="bgm-btn" onclick="toggleBGM('solo', this)" data-bgm="solo">🍽️ 一人食</button>
+          <button class="bgm-btn" onclick="toggleBGM('dish', this)" data-bgm="dish">🔥 菜品暴击</button>
+        </div>
+      </div>
+      <div class="coupon-result" id="coupon-result" style="display:none"></div>
+      <div class="caption-box">
+        <div class="caption-label">📋 发布文案 <span class="lock">（已编辑好，一键复制）</span></div>
+        <textarea class="caption-textarea" id="caption-text" readonly></textarea>
+        <button class="btn-copy" id="btn-copy">📋 复制文案</button>
+      </div>
+      <div class="incentive-strip">
+        <div class="is-headline">你的视频，不止分享<em>「美」</em>——还可以<em>「变现」</em></div>
+        <div class="is-row">
+          <div class="is-item">
+            <div class="is-amount" id="rebate-amount">¥8</div>
+            <div class="is-label">发布即得<br>现金立返</div>
+          </div>
+          <div class="is-item">
+            <div class="is-amount">+¥12</div>
+            <div class="is-label">50点赞互动<br>额外奖励</div>
+          </div>
+          <div class="is-item">
+            <div class="is-amount">5%</div>
+            <div class="is-label">推荐消费<br>佣金分成</div>
+          </div>
+        </div>
+        <button class="add-phone-btn" id="bind-after-done" onclick="showBindPhone()" style="display:none;margin-top:8px;width:100%;text-align:center">📱 绑定手机号领取更多福利</button>
+      </div>
+      <button class="back-btn-bottom" onclick="switchStep(2)" style="margin-top:16px">← 重新拍摄</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ TAB: 服务 ============ -->
+<div class="tab-content" id="tab-service">
+<div class="main">
+  <div class="section-header">
+    <div class="plan-name"><span class="dot"></span>门店服务<span class="dot"></span></div>
+    <div class="tagline">更好的用餐体验</div>
+  </div>
+
+  <div class="service-grid">
+
+    <!-- Call Waiter -->
+    <div class="call-card">
+      <div class="call-icon">🛎️</div>
+      <div class="call-title">呼叫服务员</div>
+      <div class="table-badge" id="table-badge" style="display:none">
+        📍 <span id="table-label"></span>
+      </div>
+      <div class="call-desc" id="call-desc">选择服务类型，服务员马上到</div>
+      <div class="call-type-grid">
+        <button class="ct-btn" data-type="tea" onclick="selectCallType('tea', this)">🍵<br>加水/茶</button>
+        <button class="ct-btn" data-type="dish" onclick="selectCallType('dish', this)">🍽️<br>菜品问题</button>
+        <button class="ct-btn" data-type="bill" onclick="selectCallType('bill', this)">💰<br>结账</button>
+        <button class="ct-btn" data-type="order" onclick="selectCallType('order', this)">📋<br>点单</button>
+        <button class="ct-btn" data-type="hygiene" onclick="selectCallType('hygiene', this)">🧹<br>卫生</button>
+        <button class="ct-btn" data-type="other" onclick="selectCallType('other', this)">📞<br>其他</button>
+      </div>
+      <button class="call-btn" id="call-btn" onclick="callWaiter()" disabled>请先选择服务类型</button>
+      <div class="call-done" id="call-done">✅ 已呼叫，服务员马上来！</div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback-card">
+      <div class="fb-header">
+        <div class="fb-icon">💬</div>
+        <div class="fb-title">菜品吐槽 & 改进建议</div>
+        <div class="fb-sub">你的一句话，让我们变得更好</div>
+      </div>
+      <div class="fb-emoji-row">
+        <button class="fb-emoji-btn" onclick="selectMood('😍')">😍</button>
+        <button class="fb-emoji-btn" onclick="selectMood('😊')">😊</button>
+        <button class="fb-emoji-btn" onclick="selectMood('😐')">😐</button>
+        <button class="fb-emoji-btn" onclick="selectMood('😕')">😕</button>
+        <button class="fb-emoji-btn" onclick="selectMood('😤')">😤</button>
+      </div>
+      <textarea class="fb-textarea" id="fb-text" placeholder="说说你的想法：哪个菜好吃？哪个需要改进？服务怎么样？..."></textarea>
+      <button class="fb-submit-btn" onclick="submitFeedback()">提交反馈</button>
+      <div class="fb-success" id="fb-success">✅ 感谢你的反馈！老板已经收到啦</div>
+      <div class="fb-history-list" id="fb-history" style="margin-top:16px"></div>
+    </div>
+
+    <!-- Store info -->
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-icon">📍</span>
+        <span class="info-label">地址</span>
+        <span class="info-value" id="info-address">呈贡新天地步行街东街H栋2楼</span>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">📶</span>
+        <span class="info-label">WiFi</span>
+        <span class="info-value" id="info-wifi">YunShanShan-Guest</span>
+        <button class="info-copy" onclick="copyText('wifi-pwd')">复制密码</button>
+      </div>
+      <div class="info-row" style="display:none" id="wifi-pwd-row">
+        <span class="info-icon"></span>
+        <span class="info-label">密码</span>
+        <span class="info-value" id="wifi-pwd">yuns888888</span>
+      </div>
+      <div class="info-row">
+        <span class="info-icon">🕐</span>
+        <span class="info-label">营业</span>
+        <span class="info-value" id="info-hours">11:00 - 21:30</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ============ TAB: 我的 ============ -->
+<div class="tab-content" id="tab-my">
+<div class="main">
+  <div class="section-header">
+    <div class="plan-name"><span class="dot"></span>我的出片<span class="dot"></span></div>
+    <div class="tagline">记录你的每一次闪耀</div>
+  </div>
+
+  <!-- User card -->
+  <div class="user-card" id="user-card">
+    <div class="user-avatar" id="my-avatar">📱</div>
+    <div class="user-info-name" id="my-nickname">未绑定</div>
+    <div class="user-info-phone" id="my-phone"></div>
+    <div id="my-level"></div>
+    <button class="add-phone-btn" id="my-bind-btn" onclick="showBindPhone()" style="display:inline-flex;margin-top:8px">📱 绑定手机号</button>
+    <div class="stats-row" id="my-stats" style="display:none">
+      <div class="stat-item"><div class="stat-num" id="stat-videos">0</div><div class="stat-label">出片次数</div></div>
+      <div class="stat-item"><div class="stat-num" id="stat-coupons">0</div><div class="stat-label">可用券</div></div>
+      <div class="stat-item"><div class="stat-num" id="stat-rebates">¥0</div><div class="stat-label">累计返利</div></div>
+    </div>
+  </div>
+
+  <div class="section-title" id="coupon-section-title" style="display:none">🎫 我的优惠券</div>
+  <div class="coupon-list" id="coupon-list"></div>
+
+  <div class="section-title">📹 出片记录</div>
+  <div class="history-list" id="history-list">
+    <div class="empty-state"><div class="empty-emoji">📹</div><div class="empty-text">还没有出片记录<br>去拍一条吧 ✨</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<!-- ============ UPLOAD OVERLAY ============ -->
+<div class="uploading-overlay" id="uploading-overlay">
+  <div class="card">
+    <div class="pct" id="upload-pct">0%</div>
+    <p style="font-size:13px;color:var(--text2);margin-top:4px">上传中...</p>
+  </div>
+</div>
+
+<!-- ============ DEMO VIDEO MODAL ============ -->
+<div class="demo-modal" id="demo-modal" onclick="closeDemo()">
+  <button class="demo-modal-close" onclick="closeDemo()">✕</button>
+  <video id="demo-video" controls playsinline onclick="event.stopPropagation()"></video>
+</div>
+
+
+<!-- ============ TAB: 游戏 ============ -->
+<div class="tab-content" id="tab-game">
+<div class="main">
+
+    <!-- ====== 等位游戏入口 ====== -->
+  <div id="game-entry">
+    <div class="section-header">
+      <div class="plan-name"><span class="dot"></span>桌游派对<span class="dot"></span></div>
+      <div class="tagline">等菜不无聊，选个游戏玩起来</div>
+    </div>
+
+    <!-- 游戏选择卡片 -->
+    <div id="game-select-screen">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px">选一个想玩的</div>
+      <div class="game-grid" style="margin-bottom:16px">
+        <button class="game-btn" onclick="selectGame('dice')">
+          <div class="game-emoji">🎲</div>
+          <div class="game-title">摇骰子</div>
+          <div class="game-desc">比大小定输赢</div>
+          <div class="game-players">2-8人</div>
+        </button>
+        <button class="game-btn" onclick="selectGame('wheel')">
+          <div class="game-emoji">🎡</div>
+          <div class="game-title">命运转盘</div>
+          <div class="game-desc">试试你的运气</div>
+          <div class="game-players">2-8人</div>
+        </button>
+        <button class="game-btn" onclick="selectGame('rps')">
+          <div class="game-emoji">✊</div>
+          <div class="game-title">猜拳对决</div>
+          <div class="game-desc">石头剪刀布</div>
+          <div class="game-players">2人</div>
+        </button>
+        <button class="game-btn" onclick="selectGame('gomoku')">
+          <div class="game-emoji">⚫</div>
+          <div class="game-title">五子棋</div>
+          <div class="game-desc">两人对战</div>
+          <div class="game-players">2人</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- 创建/加入房间 -->
+    <div id="game-room-screen" style="display:none">
+      <div style="text-align:center;margin-bottom:8px">
+        <span style="font-size:32px" id="selected-game-emoji">🎲</span>
+        <div style="font-size:13px;color:var(--text2)" id="selected-game-name">摇骰子</div>
+      </div>
+      <div class="game-room-card">
+        <h3>创建房间</h3>
+        <div class="room-desc">创建一个新房间<br>邀请朋友扫码加入</div>
+        <input type="text" class="input-room" id="input-nickname" placeholder="你的昵称" maxlength="8" style="font-size:16px;letter-spacing:1px;margin-bottom:10px">
+        <button class="btn-primary" onclick="createGameRoom()" style="margin-bottom:8px">创建房间</button>
+      </div>
+      <div class="join-section">
+        <div class="or-divider">或者</div>
+        <input type="text" class="input-room" id="input-room-code" placeholder="输入4位房间码" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+        <button class="btn-outline btn-sm" onclick="joinGameRoom()" style="width:100%;margin-top:4px">加入房间</button>
+      </div>
+      <button class="btn-text" onclick="backToGameSelect()" style="width:100%;margin-top:8px;color:var(--text2)">换一个游戏</button>
+    </div>
+  </div>
+  </div>
+
+  <!-- ====== 游戏大厅 ====== -->
+  <div id="game-lobby" style="display:none">
+    <div class="game-header">
+      <button class="back-btn" onclick="leaveGameRoom()">← 退出</button>
+      <span style="font-size:14px;font-weight:600;color:var(--text)">🎮 桌游派对</span>
+      <span style="font-size:13px;color:var(--text2)">#{room_code}</span>
+    </div>
+
+    <div class="game-room-card">
+      <div class="room-code-display">
+        <span class="code-label">房间码</span>
+        <span class="code-num" id="lobby-code"></span>
+        <button class="code-copy-btn" onclick="copyRoomCode()">复制</button>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:8px">告诉朋友这个码，他们扫码后输入即可加入</div>
+      <div class="players-grid" id="lobby-players"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-primary" id="lobby-start-btn" onclick="startSelectedGame()" style="font-size:18px;padding:14px 32px">
+        开始游戏
+      </button>
+      <div style="font-size:12px;color:var(--text2);margin-top:6px" id="lobby-game-hint">等待所有人加入后开始</div>
+    </div>
+  </div>
+
+  <!-- ====== 骰子游戏 ====== -->
+  <div id="game-dice" style="display:none">
+    <div class="game-header">
+      <button class="back-btn" onclick="backToLobby()">← 返回</button>
+      <span style="font-size:14px;font-weight:600">🎲 摇骰子</span>
+      <span class="game-round" id="dice-round">第1轮</span>
+    </div>
+    <div class="dice-area">
+      <!-- 模式选择 -->
+      <div class="dice-mode-bar" id="dice-mode-bar">
+        <button class="dice-mode-btn active" onclick="setDiceMode('party', this)">🎉 多人派对</button>
+        <button class="dice-mode-btn" onclick="setDiceMode('solo', this)">👤 单人试手</button>
+        <button class="dice-mode-btn" onclick="setDiceMode('merchant', this)">🏪 商家对战</button>
+      </div>
+      <!-- 派对/独奏 共用 -->
+      <div id="dice-party-area">
+        <div class="dice-display" id="dice-display">🎲</div>
+        <div style="font-size:14px;color:var(--text2);margin-bottom:12px" id="dice-hint">点击骰子开始摇</div>
+        <button class="btn-primary btn-sm" id="dice-roll-btn" onclick="rollDice()">🎲 摇！</button>
+        <div class="dice-result-list" id="dice-results"></div>
+        <div id="dice-punishment"></div>
+      </div>
+      <!-- 商家对战 -->
+      <div id="dice-merchant-area" style="display:none">
+        <input type="tel" class="dice-phone-input" id="dice-m-phone" placeholder="输入手机号领取奖励" maxlength="11">
+        <br>
+        <button class="btn-primary btn-sm" onclick="rollDiceMerchant()">🎲 挑战商家！</button>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">一号码仅限一次奖励</div>
+        <div id="dice-m-vs" style="display:none"></div>
+        <div id="dice-m-reward"></div>
+      </div>
+      <!-- 规则说明 -->
+      <div id="dice-rules" style="display:none;margin-top:12px;font-size:11px;color:var(--text2);text-align:left;padding:10px;background:#f9f9f9;border-radius:10px">
+        <b>商家对战规则：</b><br>
+        大1点 → 🎫 8折优惠券<br>
+        大2点 → 🥤 饮品一份<br>
+        大3点 → 🍽️ 免费指定菜品<br>
+        <span style="color:#999">每号限一次·输后3天刷新</span><br>
+        <span style="color:#d4786e">⚠️ 需出示好评截图给服务员领取</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 命运转盘 ====== -->
+  <div id="game-wheel" style="display:none">
+    <div class="game-header">
+      <button class="back-btn" onclick="backToLobby()">← 返回</button>
+      <span style="font-size:14px;font-weight:600">🎡 命运转盘</span>
+      <span class="game-round" id="wheel-round">第1轮</span>
+    </div>
+    <div class="wheel-area">
+      <div class="wheel-visual" id="wheel-visual"></div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:12px">指针停在谁，谁接受命运</div>
+      <button class="btn-primary btn-sm" id="wheel-spin-btn" onclick="spinWheel()">🎡 转动转盘！</button>
+      <div class="wheel-result" id="wheel-result"></div>
+      <div class="wheel-target" id="wheel-target"></div>
+      <div id="wheel-punishment"></div>
+    </div>
+  </div>
+
+  <!-- ====== 五子棋 ====== -->
+  <div id="game-gomoku" style="display:none">
+    <div class="game-header">
+      <button class="back-btn" onclick="backToLobby()">← 返回</button>
+      <span style="font-size:14px;font-weight:600">⚫ 五子棋</span>
+      <span style="font-size:13px;color:var(--text2)" id="gomoku-turn-text"></span>
+    </div>
+    <div class="gomoku-area">
+      <div class="gomoku-timer-bar"><div class="gomoku-timer-fill" id="gomoku-timer-fill"></div></div>
+      <div class="gomoku-turn" id="gomoku-turn-info">等待开始...</div>
+      <div style="margin-bottom:6px"><button class="gomoku-undo-btn" id="gomoku-undo-btn" onclick="gomokuRequestUndo()" disabled>↩ 悔棋</button></div>
+      <div class="gomoku-board" id="gomoku-board"></div>
+      <div id="gomoku-result"></div>
+    </div>
+  </div>
+
+    <!-- ====== 猜拳 ====== -->
+  <div id="game-rps" style="display:none">
+    <div class="game-header">
+      <button class="back-btn" onclick="backToLobby()">← 返回</button>
+      <span style="font-size:14px;font-weight:600">✊ 猜拳对决</span>
+      <span style="font-size:13px;color:var(--text2)">两人对战</span>
+    </div>
+    <div class="rps-area">
+      <div class="rps-round-label" id="rps-round-label">三拳两胜 · 第1局</div>
+      <div class="rps-scoreboard" id="rps-scoreboard">
+        <div class="rps-score-item">
+          <div class="rps-score-name" id="rps-p1-name">你</div>
+          <div class="rps-score-val" id="rps-p1-score">0</div>
+        </div>
+        <div style="font-size:20px;color:var(--text2);line-height:56px">:</div>
+        <div class="rps-score-item">
+          <div class="rps-score-name" id="rps-p2-name">对手</div>
+          <div class="rps-score-val" id="rps-p2-score">0</div>
+        </div>
+      </div>
+      <div class="rps-choice" id="rps-my-choice">🤔</div>
+      <div class="rps-btns">
+        <button class="rps-btn" id="rps-btn-rock" onclick="rpsChoose('rock')">✊</button>
+        <button class="rps-btn" id="rps-btn-scissors" onclick="rpsChoose('scissors')">✌️</button>
+        <button class="rps-btn" id="rps-btn-paper" onclick="rpsChoose('paper')">🖐️</button>
+      </div>
+      <div class="rps-vs" id="rps-result-text"></div>
+    </div>
+  </div>
+
+  <!-- ====== 单人小游戏区域 ====== -->
+  <div style="margin-top:16px">
+    <div class="solo-game-tabs">
+      <button class="solo-game-tab active" onclick="switchGameMode('multi',this)" id="solo-tab-multi">🎮 组队游戏</button>
+      <button class="solo-game-tab" onclick="switchGameMode('solo',this)" id="solo-tab-solo">🎯 单人小游戏</button>
+    </div>
+  </div>
+
+  <!-- ====== 单人小游戏 - 选择界面 ====== -->
+  <div id="solo-game-select" style="display:none">
+    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;text-align:center">等位不无聊，选个小游戏</div>
+    <div class="solo-game-grid" style="margin-bottom:16px">
+      <button class="solo-game-btn" onclick="startSoloGame('snake')">
+        <div class="sg-emoji">🐍</div>
+        <div class="sg-title">贪吃蛇</div>
+        <div class="sg-desc">经典吃蛇闯关</div>
+      </button>
+      <button class="solo-game-btn" onclick="startSoloGame('tetris')">
+        <div class="sg-emoji">🧱</div>
+        <div class="sg-title">俄罗斯方块</div>
+        <div class="sg-desc">堆叠消除</div>
+      </button>
+      <button class="solo-game-btn" onclick="startSoloGame('2048')">
+        <div class="sg-emoji">🔢</div>
+        <div class="sg-title">2048</div>
+        <div class="sg-desc">合成数字挑战</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ====== 贪吃蛇 ====== -->
+  <div id="solo-snake" style="display:none">
+    <div class="minigame-canvas-wrapper">
+      <div class="mg-header">
+        <button class="mg-back" onclick="backToSoloSelect()">← 返回</button>
+        <span class="mg-title">🐍 贪吃蛇</span>
+        <span class="mg-score">分数: <span id="snake-score">0</span></span>
+      </div>
+      <div class="mg-body">
+        <canvas id="snake-canvas" class="mg-canvas" width="300" height="300"></canvas>
+        <div class="mg-controls">
+          <button class="mg-btn mg-btn-primary" id="snake-start-btn" onclick="snakeStart()">开始游戏</button>
+          <button class="mg-btn mg-btn-danger" id="snake-pause-btn" onclick="snakeTogglePause()" style="display:none">暂停</button>
+        </div>
+        <div class="mg-swipe-hint" id="snake-hint">方向键 / 滑动控制方向</div>
+      </div>
+      <div class="mg-game-over" id="snake-gameover" style="display:none">
+        <div class="go-emoji">💀</div>
+        <div class="go-title">游戏结束</div>
+        <div class="go-score" id="snake-final-score">得分: 0</div>
+        <button class="go-btn" onclick="snakeStart()">再来一局</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 俄罗斯方块 ====== -->
+  <div id="solo-tetris" style="display:none">
+    <div class="minigame-canvas-wrapper">
+      <div class="mg-header">
+        <button class="mg-back" onclick="backToSoloSelect()">← 返回</button>
+        <span class="mg-title">🧱 俄罗斯方块</span>
+        <span class="mg-score">分数: <span id="tetris-score">0</span></span>
+      </div>
+      <div class="mg-body" style="flex-direction:row;gap:12px;align-items:flex-start;justify-content:center;flex-wrap:wrap">
+        <canvas id="tetris-canvas" class="mg-canvas" width="200" height="400"></canvas>
+        <div style="text-align:center">
+          <canvas id="tetris-next" class="mg-canvas" width="80" height="80" style="background:#1a1a2e;border-radius:6px;margin-bottom:10px"></canvas>
+          <div class="mg-controls" style="flex-direction:column;gap:6px;margin-top:0">
+            <button class="mg-btn mg-btn-primary" id="tetris-start-btn" onclick="tetrisStart()">开始游戏</button>
+            <button class="mg-btn mg-btn-danger" id="tetris-pause-btn" onclick="tetrisTogglePause()" style="display:none">暂停</button>
+          </div>
+          <div class="mg-swipe-hint" style="margin-top:8px">方向键移动 · ↑旋转</div>
+        </div>
+      </div>
+      <div class="mg-game-over" id="tetris-gameover" style="display:none">
+        <div class="go-emoji">💥</div>
+        <div class="go-title">游戏结束</div>
+        <div class="go-score" id="tetris-final-score">得分: 0</div>
+        <button class="go-btn" onclick="tetrisStart()">再来一局</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 2048 ====== -->
+  <div id="solo-2048" style="display:none">
+    <div class="minigame-canvas-wrapper">
+      <div class="mg-header">
+        <button class="mg-back" onclick="backToSoloSelect()">← 返回</button>
+        <span class="mg-title">🔢 2048</span>
+        <span class="mg-score">分数: <span id="g2048-score">0</span></span>
+      </div>
+      <div class="mg-body">
+        <div class="grid-2048" id="g2048-grid"></div>
+        <div class="mg-controls">
+          <button class="mg-btn mg-btn-primary" id="g2048-start-btn" onclick="g2048Start()">新游戏</button>
+        </div>
+        <div class="mg-swipe-hint">方向键 / 滑动移动方块</div>
+      </div>
+      <div class="mg-game-over" id="g2048-gameover" style="display:none">
+        <div class="go-emoji">🎯</div>
+        <div class="go-title" id="g2048-go-title">游戏结束</div>
+        <div class="go-score" id="g2048-final-score">得分: 0</div>
+        <button class="go-btn" onclick="g2048Start()">再来一局</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ============ STATE ============
+const API = 'http://47.238.152.195/daka/api/daka';
+const STORE = 'yunshanshan';
+let state = {
+  store: null,
+  templates: [],
+  selectedTemplate: null,
+  customerId: 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+  uploadedSegments: {},
+  mergeDone: false,
+  phone: '',
+  table: (() => { try { return new URLSearchParams(location.search).get('table') || ''; } catch(e) { return ''; } })(),
+  user: null,
+  currentTab: 'daka',
+  feedbackMood: '',
+  demos: {},
+  stats: null,
+};
+
+// ============ INIT ============
+async function init() {
+  // Check stored phone
+  const saved = localStorage.getItem('daka_phone');
+  if (saved) { state.phone = saved; loadUserProfile(); }
+
+  try {
+    const [storeRes, tplRes, demoRes, statsRes] = await Promise.all([
+      fetch(`${API}/store?store=${STORE}`),
+      fetch(`${API}/templates?store=${STORE}`),
+      fetch(`${API}/demos?store=${STORE}`).catch(() => ({json:()=>({demos:{}})})),
+      fetch(`${API}/stats?store=${STORE}`).catch(() => ({json:()=>({cases:[],total_videos:0,total_likes:0})}))
+    ]);
+    state.store = (await storeRes.json()).store;
+    state.templates = (await tplRes.json()).templates;
+    state.demos = (await demoRes.json()).demos;
+    state.stats = await statsRes.json();
+    applyStoreColors(state.store);
+    // Show table number if present
+    if (state.table) {
+      const badge = document.getElementById('table-badge');
+      const label = document.getElementById('table-label');
+      if (badge && label) {
+        badge.style.display = 'inline-block';
+        label.textContent = state.table + '桌';
+      }
+    }
+    renderSocialBar();
+    renderTemplates();
+    document.getElementById('store-tagline').textContent = state.store.tagline || '三步出片 · 现金立返';
+    // Update service info
+    if (state.store.address) document.getElementById('info-address').textContent = state.store.address;
+    // Show phone modal if not bound
+    if (!state.phone) setTimeout(() => showBindPhone(), 800);
+    // Load feedback history
+    loadFeedbackHistory();
+  } catch(e) {
+    console.error('Init failed:', e);
+    showToast('加载失败，请刷新页面', 'error');
+  }
+}
+
+function applyStoreColors(store) {
+  if (!store || !store.colors) return;
+  const c = store.colors;
+  const root = document.documentElement.style;
+  if (c.primary) root.setProperty('--primary', c.primary);
+  if (c.bg) root.setProperty('--bg', c.bg);
+  if (c.accent) root.setProperty('--accent', c.accent);
+  if (c.gold) root.setProperty('--accent', c.gold);
+  if (c.primary) root.setProperty('--primary-dark', darken(c.primary, 0.85));
+  if (store.incentives && store.incentives.instant_rebate) {
+    document.getElementById('rebate-amount').textContent = '¥' + store.incentives.instant_rebate;
+  }
+}
+function darken(hex, factor) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return '#' + [r,g,b].map(v => Math.round(v*factor).toString(16).padStart(2,'0')).join('');
+}
+
+// ============ TAB SWITCHING ============
+function switchTab(tab) {
+  state.currentTab = tab;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'my') { loadUserProfile(); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============ PHONE BINDING ============
+function showBindPhone() {
+  document.getElementById('phone-overlay').classList.add('active');
+  document.getElementById('phone-number').value = state.phone || '';
+}
+
+function skipBind() {
+  document.getElementById('phone-overlay').classList.remove('active');
+}
+
+async function doBindPhone() {
+  const phone = document.getElementById('phone-number').value.trim();
+  if (!/^1[3-9]\d{9}$/.test(phone)) {
+    showToast('请输入正确的手机号', 'error');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('phone', phone);
+  formData.append('store', STORE);
+  try {
+    const res = await fetch(`${API}/user/bind`, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.message || '绑定失败');
+    state.phone = phone;
+    state.user = data.user;
+    localStorage.setItem('daka_phone', phone);
+    document.getElementById('phone-overlay').classList.remove('active');
+    showToast('绑定成功！');
+    updateUserUI();
+    if (state.currentTab === 'my') renderMyPage();
+  } catch(e) {
+    showToast(e.message, 'error');
+  }
+}
+
+// ============ USER PROFILE ============
+async function loadUserProfile() {
+  if (!state.phone) return;
+  try {
+    const res = await fetch(`${API}/user/${state.phone}?store=${STORE}`);
+    if (!res.ok) {
+      if (res.status === 404) {
+        localStorage.removeItem('daka_phone');
+        state.phone = '';
+        state.user = null;
+        updateUserUI();
+      }
+      return;
+    }
+    state.user = await res.json();
+    updateUserUI();
+    if (state.currentTab === 'my') renderMyPage();
+  } catch(e) {
+    console.error('Load user failed:', e);
+  }
+}
+
+function updateUserUI() {
+  const user = state.user;
+  const hasPhone = !!state.phone;
+  const badge = document.getElementById('nav-badge');
+  if (user && user.active_coupons && user.active_coupons.length > 0) {
+    badge.style.display = 'block';
+  } else {
+    badge.style.display = 'none';
+  }
+  document.getElementById('bind-after-done').style.display = hasPhone ? 'none' : 'inline-flex';
+  document.getElementById('my-bind-btn').style.display = hasPhone ? 'none' : 'inline-flex';
+  document.getElementById('my-nickname').textContent = hasPhone ? (state.phone.slice(0,3)+'****'+state.phone.slice(7)) : '未绑定';
+  document.getElementById('my-phone').textContent = hasPhone ? '已绑定' : '';
+  document.getElementById('my-avatar').textContent = '📱';
+}
+
+// ============ MY PAGE RENDER ============
+function renderMyPage() {
+  const user = state.user;
+  if (!user) {
+    document.getElementById('my-stats').style.display = 'none';
+    document.getElementById('coupon-section-title').style.display = 'none';
+    document.getElementById('coupon-list').innerHTML = '';
+    document.getElementById('history-list').innerHTML = '<div class="empty-state"><div class="empty-emoji">📹</div><div class="empty-text">还没有出片记录<br>去拍一条吧 ✨</div></div>';
+    document.getElementById('my-level').innerHTML = '';
+    document.getElementById('my-bind-btn').style.display = 'inline-flex';
+    return;
+  }
+  document.getElementById('my-bind-btn').style.display = 'none';
+  document.getElementById('my-stats').style.display = 'flex';
+
+  const level = user.level;
+  const cls = level.name === '素人' ? 'level-suren' : level.name === '常客' ? 'level-changke' : level.name === '达人' ? 'level-daren' : 'level-hehuoren';
+  document.getElementById('my-level').innerHTML = `<span class="level-badge ${cls}">${level.icon} ${level.name}</span>`;
+
+  document.getElementById('stat-videos').textContent = user.video_count || 0;
+  document.getElementById('stat-coupons').textContent = (user.active_coupons || []).length;
+  document.getElementById('stat-rebates').textContent = '¥' + (user.total_rebates || 0);
+
+  const coupons = user.coupons || [];
+  if (coupons.length > 0) {
+    document.getElementById('coupon-section-title').style.display = 'block';
+    document.getElementById('coupon-list').innerHTML = coupons.slice().reverse().map(c => `
+      <div class="coupon-item ${c.used ? 'used' : ''}">
+        <div class="c-amount">¥${c.amount}</div>
+        <div class="c-info">
+          <div class="c-code">${c.code}</div>
+          <div class="c-expire">${c.used ? '已使用 ' + formatDate(c.used_at) : '有效期至 ' + formatDate(c.expires_at)}</div>
+        </div>
+        <span class="c-status ${c.used ? 'c-tag-used' : 'c-tag-valid'}">${c.used ? '已用' : '有效'}</span>
+      </div>
+    `).join('');
+  } else {
+    document.getElementById('coupon-section-title').style.display = 'none';
+    document.getElementById('coupon-list').innerHTML = '';
+  }
+
+  const videos = user.videos || [];
+  if (videos.length > 0) {
+    document.getElementById('history-list').innerHTML = videos.slice().reverse().map(v => {
+      const tpl = state.templates.find(t => t.id === v.template);
+      return `
+        <div class="history-item">
+          <div class="h-emoji">${tpl ? tpl.emoji : '📹'}</div>
+          <div class="h-info">
+            <div class="h-tpl">${tpl ? tpl.name : v.template}</div>
+            <div class="h-time">${formatDate(v.timestamp)}</div>
+          </div>
+          ${v.coupon_issued ? `<div class="h-coupon">🎫 +¥</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  } else {
+    document.getElementById('history-list').innerHTML = '<div class="empty-state"><div class="empty-emoji">📹</div><div class="empty-text">还没有出片记录<br>去拍一条吧 ✨</div></div>';
+  }
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso);
+    return (d.getMonth()+1) + '月' + d.getDate() + '日';
+  } catch(e) { return iso.slice(0, 10); }
+}
+
+// ============ SOCIAL PROOF ============
+function renderSocialBar() {
+  const stats = state.stats;
+  if (!stats || !stats.cases || stats.cases.length === 0) return;
+  
+  const section = document.getElementById('social-section');
+  section.style.display = 'block';
+  
+  // Stats banner
+  const payout = stats.total_payout || 0;
+  const creators = stats.total_creators || stats.cases.length;
+  const likes = stats.total_likes || 0;
+  document.getElementById('stats-banner').innerHTML = 
+    `<span class="stat-item">🏆 已分成 <span class="stat-val">¥${payout.toLocaleString()}</span></span>` +
+    `<span class="stat-divider">｜</span>` +
+    `<span class="stat-item">${creators}位博主</span>` +
+    `<span class="stat-divider">｜</span>` +
+    `<span class="stat-item">累计 <span class="stat-val">${likes.toLocaleString()}</span> ❤</span>`;
+  
+  // Case cards
+  document.getElementById('cases-scroll').innerHTML = stats.cases.map(c => `
+    <div class="case-card">
+      <img class="case-img" src="${c.image}" alt="${c.name}" loading="lazy" onerror="this.style.display='none'">
+      <div class="case-overlay">
+        <div class="case-name">@${c.name}</div>
+        <div class="case-stats">❤ ${c.likes.toLocaleString()} · ${c.template}</div>
+        ${c.comment ? `<div class="case-quote">"${c.comment}"</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============ STEP 1: TEMPLATES ============
+function renderTemplates() {
+  const container = document.getElementById('template-list');
+  const demos = state.demos || {};
+  container.innerHTML = state.templates.map(t => {
+    const tplDemos = demos[t.id];
+    const demoBtn = tplDemos && tplDemos.length > 0 
+      ? `<div class="template-badge has-demo" onclick="event.stopPropagation();playDemo('${tplDemos[0].url}')">📺 看样片</div>`
+      : `<div class="template-badge">${t.segments.length}段拍摄</div>`;
+    return `
+    <div class="template-card" data-id="${t.id}" onclick="selectTemplate('${t.id}')">
+      <div class="template-emoji">${t.emoji}</div>
+      <div class="template-info">
+        <div class="template-name">${t.name}</div>
+        <div class="template-desc">${t.desc}</div>
+        <div class="template-meta"><span>${t.duration}</span><span>${t.segments.length}个片段</span>${t.bgm ? `<span>🎵 ${t.bgm.name}</span>` : ''}</div>
+      </div>
+      ${demoBtn}
+    </div>
+  `}).join('');
+}
+
+function selectTemplate(id) {
+  state.selectedTemplate = state.templates.find(t => t.id === id);
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`.template-card[data-id="${id}"]`)?.classList.add('selected');
+  document.getElementById('btn-confirm-template').disabled = false;
+}
+
+document.getElementById('btn-confirm-template').addEventListener('click', () => {
+  if (!state.selectedTemplate) return;
+  document.getElementById('selected-tpl-name').textContent = state.selectedTemplate.name;
+  renderUploadSlots();
+  switchStep(2);
+});
+
+// ============ STEP 2: UPLOAD ============
+function renderUploadSlots() {
+  const container = document.getElementById('upload-slots');
+  const tpl = state.selectedTemplate;
+  state.uploadedSegments = {};
+  window._previewUrls = window._previewUrls || {};
+  container.innerHTML = tpl.segments.map(seg => `
+    <div class="upload-slot" id="slot-${seg.id}" onclick="showPicker('${seg.id}')">
+      <div class="slot-actions">
+        <button class="slot-delete" onclick="deleteSegment('${seg.id}', event)">✕</button>
+      </div>
+      <div class="slot-icon">📹</div>
+      <div class="slot-label">${seg.label} · 片段 ${seg.id}</div>
+      <div class="slot-tip">${seg.tip}</div>
+      <div class="slot-status">✅ 已上传</div>
+      <div class="slot-video-preview" id="preview-${seg.id}">
+        <video muted playsinline style="display:none"></video>
+        <img style="display:none">
+        <span class="play-badge">▶ 素材</span>
+      </div>
+      <div class="progress-bar" id="progress-${seg.id}"><div class="fill"></div></div>
+    </div>
+  `).join('');
+  updateMergeButton();
+}
+
+async function uploadFile(file, segmentId) {
+  if (!file) return;
+  if (file.size > 200 * 1024 * 1024) { showToast('文件不能超过200MB', 'error'); return; }
+  const slot = document.getElementById('slot-' + segmentId);
+  const progressBar = document.getElementById('progress-' + segmentId);
+  const overlay = document.getElementById('uploading-overlay');
+  const pctEl = document.getElementById('upload-pct');
+  // Show local preview immediately (BEFORE overlay, so user sees it)
+  const localUrl = URL.createObjectURL(file);
+  window._previewUrls = window._previewUrls || {};
+  window._previewUrls[segmentId] = localUrl;
+  const preview = document.getElementById('preview-' + segmentId);
+  if (preview) {
+    const isImage = file.type.startsWith('image/');
+    const video = preview.querySelector('video');
+    const img = preview.querySelector('img');
+    const badge = preview.querySelector('.play-badge');
+    if (isImage) {
+      img.src = localUrl;
+      img.style.display = 'block';
+      video.style.display = 'none';
+      if (badge) badge.textContent = '📷 照片';
+    } else {
+      video.src = localUrl;
+      video.style.display = 'block';
+      img.style.display = 'none';
+      if (badge) badge.textContent = '▶ 视频';
+    }
+  }
+  slot.classList.add('filled');
+  slot.querySelector('.slot-icon').textContent = '✅';
+  // Now show upload overlay
+  overlay.classList.add('active');
+  progressBar.classList.add('active');
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('template', state.selectedTemplate.id);
+  formData.append('segment', segmentId);
+  formData.append('customer_id', state.customerId);
+  formData.append('phone', state.phone);
+  formData.append('store', STORE);
+  try {
+    const xhr = new XMLHttpRequest();
+    const result = await new Promise((resolve, reject) => {
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const pct = Math.round(e.loaded / e.total * 100);
+          pctEl.textContent = pct + '%';
+          progressBar.querySelector('.fill').style.width = pct + '%';
+        }
+      });
+      xhr.addEventListener('load', () => {
+        if (xhr.status >= 200 && xhr.status < 300) resolve(JSON.parse(xhr.responseText));
+        else reject(new Error(xhr.status + ' ' + xhr.statusText));
+      });
+      xhr.addEventListener('error', () => reject(new Error('网络错误')));
+      xhr.open('POST', `${API}/upload`);
+      xhr.send(formData);
+    });
+    state.uploadedSegments[segmentId] = result;
+    showToast(`${segmentId}段上传成功`, 'success');
+  } catch(e) {
+    showToast('上传失败: ' + e.message, 'error');
+  } finally {
+    overlay.classList.remove('active');
+    progressBar.classList.remove('active');
+    updateMergeButton();
+  }
+}
+
+function updateMergeButton() {
+  const tpl = state.selectedTemplate;
+  if (!tpl) return;
+  const allUploaded = tpl.segments.every(s => state.uploadedSegments[s.id]);
+  document.getElementById('btn-start-merge').disabled = !allUploaded;
+}
+
+document.getElementById('btn-start-merge').addEventListener('click', startMerge);
+
+// ============ STEP 3: PROCESSING & MERGE ============
+async function startMerge() {
+  switchStep(3);
+  const formData = new FormData();
+  formData.append('template', state.selectedTemplate.id);
+  formData.append('customer_id', state.customerId);
+  formData.append('phone', state.phone);
+  formData.append('store', STORE);
+  try {
+    const res = await fetch(`${API}/merge`, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.status === 'error') throw new Error(data.message);
+    pollStatus();
+  } catch(e) {
+    showToast('剪辑失败: ' + e.message, 'error');
+    switchStep(2);
+  }
+}
+
+function pollStatus() {
+  let attempts = 0;
+  const maxAttempts = 60;
+  const subEl = document.getElementById('processing-sub');
+  const messages = ['正在拼接素材，预计1-2分钟', '正在匹配BGM...', '正在添加转场效果...', '即将完成，请稍候 ✨'];
+  const timer = setInterval(async () => {
+    attempts++;
+    subEl.textContent = messages[Math.min(Math.floor(attempts/8), messages.length-1)];
+    try {
+      const res = await fetch(`${API}/status?customer_id=${state.customerId}&template=${state.selectedTemplate.id}&store=${STORE}`);
+      const data = await res.json();
+      if (data.status === 'done') {
+        clearInterval(timer);
+        state.mergeDone = true;
+        state.mergeResult = data;
+        showResult(data);
+      } else if (data.status === 'error') {
+        clearInterval(timer);
+        showToast('剪辑出错，请重试', 'error');
+        switchStep(2);
+      }
+    } catch(e) {}
+    if (attempts >= maxAttempts) {
+      clearInterval(timer);
+      showToast('处理超时，请重试', 'error');
+      switchStep(2);
+    }
+  }, 2000);
+}
+
+// ============ STEP 4: DOWNLOAD ============
+async function showResult(mergeData) {
+  const video = document.getElementById('result-video');
+  const downloadUrl = `${API}/download/${state.customerId}?template=${state.selectedTemplate.id}&store=${STORE}`;
+  video.src = downloadUrl;
+  document.getElementById('btn-download').href = downloadUrl;
+
+  try {
+    const res = await fetch(`${API}/caption/${state.selectedTemplate.id}?store=${STORE}`);
+    const data = await res.json();
+    document.getElementById('caption-text').value = data.caption || '';
+  } catch(e) {
+    document.getElementById('caption-text').value = '来芸山杉打卡啦 ✨\\n📍呈贡新天地步行街东街H栋2楼\\n#昆明美食 #呈贡大学城';
+  }
+
+  const couponEl = document.getElementById('coupon-result');
+  if (mergeData && mergeData.coupon) {
+    const c = mergeData.coupon;
+    couponEl.style.display = 'block';
+    couponEl.innerHTML = `
+      <div class="coupon-icon">🎫</div>
+      <div class="coupon-title">已自动发放优惠券</div>
+      <div class="coupon-code">${c.code}</div>
+      <div class="coupon-desc">¥${c.amount} 代金券 · 有效期30天<br>结账时出示券码给服务员即可</div>
+    `;
+    if (state.phone) loadUserProfile();
+  } else if (!state.phone) {
+    couponEl.style.display = 'block';
+    couponEl.innerHTML = `
+      <div class="coupon-icon">🔓</div>
+      <div class="coupon-title">绑定手机号自动发券</div>
+      <div class="coupon-desc">下次出片即可领取 ¥${state.store.coupon_amount || 5} 代金券</div>
+      <button class="add-phone-btn" onclick="showBindPhone()" style="margin-top:8px">📱 立即绑定</button>
+    `;
+  } else {
+    couponEl.style.display = 'none';
+  }
+
+  switchStep(4);
+}
+
+document.getElementById('btn-copy').addEventListener('click', () => {
+  const textarea = document.getElementById('caption-text');
+  textarea.select();
+  document.execCommand('copy');
+  showToast('文案已复制！去小红书/抖音粘贴发布吧 ✨', 'success');
+});
+
+// ============ STEP NAVIGATION ============
+function switchStep(step) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + ['','template','upload','processing','download'][step]).classList.add('active');
+  document.querySelectorAll('.step-item').forEach(item => {
+    const s = parseInt(item.dataset.step);
+    item.classList.remove('active','done');
+    if (s === step) item.classList.add('active');
+    if (s < step) item.classList.add('done');
+  });
+  window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+
+// ============ SERVICE: CALL WAITER ============
+let selectedCallType = '';
+
+function selectCallType(type, btn) {
+  selectedCallType = type;
+  document.querySelectorAll('.ct-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const callBtn = document.getElementById('call-btn');
+  callBtn.disabled = false;
+  const labels = {tea:'呼叫加水/茶', dish:'呼叫·菜品问题', bill:'呼叫·结账', order:'呼叫·点单', hygiene:'呼叫·卫生问题', other:'呼叫服务员'};
+  callBtn.textContent = '🛎️ ' + (labels[type] || '呼叫服务员');
+}
+
+async function callWaiter() {
+  // Must bind phone first
+  if (!state.phone) {
+    showToast('请先绑定手机号再呼叫', 'error');
+    showBindPhone();
+    return;
+  }
+  if (!selectedCallType) {
+    showToast('请先选择服务类型', 'error');
+    return;
+  }
+  const btn = document.getElementById('call-btn');
+  const done = document.getElementById('call-done');
+  btn.disabled = true;
+  btn.textContent = '呼叫中...';
+  try {
+    const formData = new FormData();
+    formData.append('phone', state.phone);
+    formData.append('store', STORE);
+    formData.append('table', state.table);
+    formData.append('call_type', selectedCallType);
+    const res = await fetch(`${API}/call`, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.message || '呼叫失败');
+    done.style.display = 'block';
+    btn.style.display = 'none';
+    showToast(data.message, 'success');
+    setTimeout(() => { done.style.display = 'none'; btn.style.display = 'block'; btn.disabled = false; updateCallButton(); }, 15000);
+  } catch(e) {
+    showToast(e.message, 'error');
+    btn.disabled = false;
+    updateCallButton();
+  }
+}
+
+function updateCallButton() {
+  const callBtn = document.getElementById('call-btn');
+  const labels = {tea:'呼叫加水/茶', dish:'呼叫·菜品问题', bill:'呼叫·结账', order:'呼叫·点单', hygiene:'呼叫·卫生问题', other:'呼叫服务员'};
+  callBtn.textContent = '🛎️ ' + (labels[selectedCallType] || '呼叫服务员');
+  callBtn.disabled = !selectedCallType;
+}
+
+// ============ SERVICE: FEEDBACK ============
+function selectMood(mood) {
+  state.feedbackMood = mood;
+  document.querySelectorAll('.fb-emoji-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent === mood);
+  });
+}
+
+async function submitFeedback() {
+  const text = document.getElementById('fb-text').value.trim();
+  if (!text && !state.feedbackMood) {
+    showToast('至少选一个心情或写一句话吧', 'error');
+    return;
+  }
+  if (!state.phone) {
+    showToast('请先绑定手机号', 'error');
+    showBindPhone();
+    return;
+  }
+  try {
+    const formData = new FormData();
+    formData.append('phone', state.phone);
+    formData.append('mood', state.feedbackMood);
+    formData.append('text', text);
+    formData.append('store', STORE);
+    const res = await fetch(`${API}/feedback`, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.message || '提交失败');
+    document.getElementById('fb-text').value = '';
+    state.feedbackMood = '';
+    document.querySelectorAll('.fb-emoji-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('fb-success').style.display = 'block';
+    setTimeout(() => document.getElementById('fb-success').style.display = 'none', 3000);
+    loadFeedbackHistory();
+  } catch(e) {
+    showToast(e.message, 'error');
+  }
+}
+
+async function loadFeedbackHistory() {
+  if (!state.phone) return;
+  try {
+    const res = await fetch(`${API}/feedback/${state.phone}?store=${STORE}`);
+    const data = await res.json();
+    if (data.items && data.items.length > 0) {
+      document.getElementById('fb-history').innerHTML = 
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:6px">📝 我的吐槽记录</div>' +
+        data.items.slice(-5).reverse().map(f => `
+          <div class="fb-history-item">
+            <span class="fb-h-emoji">${f.mood || '💬'}</span>
+            <span style="flex:1">${f.text || '（心情表达）'}</span>
+            <span style="font-size:11px;color:var(--text2)">${formatDate(f.timestamp)}</span>
+          </div>
+        `).join('');
+    }
+  } catch(e) {}
+}
+
+// ============ SERVICE: INFO ============
+function copyText(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  // Show password row
+  document.getElementById('wifi-pwd-row').style.display = 'flex';
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    showToast('WiFi密码已复制！');
+  }).catch(() => {
+    showToast('WiFi密码：' + el.textContent);
+  });
+}
+
+// ============ TOAST ============
+function showToast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + (type || '');
+  setTimeout(() => el.classList.add('show'), 10);
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ============ DEMO VIDEO ============
+function playDemo(url) {
+  const modal = document.getElementById('demo-modal');
+  const video = document.getElementById('demo-video');
+  video.src = url;
+  modal.classList.add('active');
+  video.play().catch(() => {});
+}
+function closeDemo() {
+  const modal = document.getElementById('demo-modal');
+  const video = document.getElementById('demo-video');
+  modal.classList.remove('active');
+  video.pause();
+  video.src = '';
+}
+
+// ============ START ============
+init();
+
+
+// ============ 游戏Tab ============
+const GAME_WS_URL = (location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + location.hostname + '/game/ws';
+const GAME_API = '/game/api';
+
+let gs = {
+  ws: null,
+  pid: 'p' + Math.random().toString(36).slice(2,8),
+  roomCode: null,
+  game: null,
+  selectedGame: null,
+};
+
+function getGameNickname() {
+  const input = document.getElementById('input-nickname');
+  const name = (input.value || '').trim();
+  return name || ('玩家' + Math.floor(Math.random()*9000+1000));
+}
+
+function connectWS() {
+  if (gs.ws && gs.ws.readyState === WebSocket.OPEN) {
+    if (gs._pendingSend) { var cb = gs._pendingSend; gs._pendingSend = null; cb(); }
+    return;
+  }
+  if (gs.ws && gs.ws.readyState === WebSocket.CONNECTING) return;
+  gs.ws = new WebSocket(GAME_WS_URL);
+  gs.ws.onopen = function() {
+    console.log('[GameWS] 已连接');
+    if (gs._pendingSend) { var cb = gs._pendingSend; gs._pendingSend = null; cb(); }
+  };
+  gs.ws.onmessage = handleGameMessage;
+  gs.ws.onclose = function() { console.log('[GameWS] 断开, 2s后重连...'); setTimeout(connectWS, 2000); };
+  gs.ws.onerror = function(e) { console.log('[GameWS] 连接错误'); };
+}
+
+function sendGame(msg) {
+  if (gs.ws && gs.ws.readyState === WebSocket.OPEN) {
+    gs.ws.send(JSON.stringify(msg));
+    return;
+  }
+  gs._pendingSend = function() { gs.ws.send(JSON.stringify(msg)); };
+  connectWS();
+}
+
+function handleGameMessage(e) {
+  const msg = JSON.parse(e.data);
+  const type = msg.type;
+
+  if (type === 'room_created' || type === 'room_joined') {
+    gs.pid = msg.pid;
+    gs.roomCode = msg.room.code;
+    document.getElementById('game-entry').style.display = 'none';
+    document.getElementById('game-room-screen').style.display = 'none';
+    document.getElementById('lobby-code').textContent = msg.room.code;
+    // 2-player games: show waiting. Multi-player: game_started comes next from backend.
+    var is2p = msg.room.game === 'gomoku' || msg.room.game === 'rps';
+    if (is2p && (!msg.room.players || msg.room.players.length < 2)) {
+      document.getElementById('game-lobby').style.display = 'block';
+      document.getElementById('lobby-game-hint').textContent = '等待对手扫码加入...';
+    }
+    renderLobbyPlayers(msg.room.players);
+  }
+
+  if (type === 'room_updated') {
+    renderLobbyPlayers(msg.room.players);
+  }
+
+  if (type === 'game_started') {
+    gs.game = msg.game;
+    document.getElementById('game-lobby').style.display = 'none';
+    hideAllGamePanels();
+    if (msg.game === 'dice') showGamePanel('game-dice');
+    if (msg.game === 'wheel') showGamePanel('game-wheel');
+    if (msg.game === 'gomoku') showGamePanel('game-gomoku');
+    if (msg.game === 'rps') showGamePanel('game-rps');
+  }
+
+  if (type === 'dice_roll') {
+    document.getElementById('dice-hint').textContent = msg.name + ' 已摇！';
+  }
+
+  if (type === 'dice_result') {
+    const d = document.getElementById('dice-display');
+    d.textContent = ['','⚀','⚁','⚂','⚃','⚄','⚅'][msg.value];
+    d.classList.add('rolling');
+    setTimeout(() => d.classList.remove('rolling'), 600);
+    document.getElementById('dice-hint').textContent = '你摇了 ' + msg.value + ' 点';
+    document.getElementById('dice-roll-btn').style.display = 'none';
+  }
+
+  if (type === 'dice_reveal') {
+    document.getElementById('dice-roll-btn').style.display = 'inline-block';
+    document.getElementById('dice-roll-btn').disabled = false;
+    let html = msg.results.map(r =>
+      '<div class="dice-player-result' + (msg.loser_pids.includes(r.pid) ? ' loser' : '') + '">' +
+      '<div class="dr-name">' + r.name + '</div>' +
+      '<div class="dr-val">' + ['','⚀','⚁','⚂','⚃','⚄','⚅'][r.value] + '</div>' +
+      '</div>'
+    ).join('');
+    document.getElementById('dice-results').innerHTML = html;
+
+    let punishHtml = '<div class="punishment-card"><div class="punish-label">😈 ' + msg.loser_text + '</div><div class="punish-text">' + msg.punishment.text + '</div>';
+    if (msg.reward) punishHtml += '<div class="punish-reward">🎁 幸运奖励: ' + msg.reward.text + '</div>';
+    punishHtml += '</div>';
+    document.getElementById('dice-punishment').innerHTML = punishHtml;
+    document.getElementById('dice-round').textContent = '第' + gs._diceRound + '轮';
+  }
+
+  if (type === 'dice_solo') {
+    const emojis = ['','⚀','⚁','⚂','⚃','⚄','⚅'];
+    document.getElementById('dice-display').textContent = emojis[msg.value];
+    document.getElementById('dice-hint').textContent = msg.name + ' 摇了 ' + msg.value + ' 点';
+  }
+
+  if (type === 'dice_battle_result') {
+    const emojis = ['','⚀','⚁','⚂','⚃','⚄','⚅'];
+    if (msg.error) {
+      showToast(msg.error, 'error');
+      document.getElementById('dice-m-reward').innerHTML = '';
+      return;
+    }
+    const vs = document.getElementById('dice-m-vs');
+    vs.style.display = 'flex';
+    const reward = document.getElementById('dice-m-reward');
+    vs.innerHTML = '<div class="dice-vs">' +
+      '<div class="dice-vs-side"><div class="dice-vs-label">你</div><div class="dice-vs-val">' + emojis[msg.customer_value] + '</div></div>' +
+      '<div class="dice-vs-vs">VS</div>' +
+      '<div class="dice-vs-side"><div class="dice-vs-label">商家</div><div class="dice-vs-val">' + emojis[msg.merchant_value] + '</div></div>' +
+      '</div>';
+    if (msg.won && msg.prize) {
+      reward.innerHTML = '<div class="dice-reward-card"><div class="dice-reward-icon">' + (msg.prize.emoji || '🎉') + '</div><div class="dice-reward-text">' + msg.prize.text + '</div><div class="dice-reward-note">需凭好评截图给服务员领取</div></div>';
+    } else {
+      reward.innerHTML = '<div style="text-align:center;margin-top:12px;color:var(--text2);font-size:14px">😢 ' + (msg.message || '没有超过商家，再接再厉') + '</div>';
+    }
+  }
+
+  if (type === 'dice_mode_set') {
+    // mode already set locally
+  }
+
+  if (type === 'wheel_result') {
+    document.getElementById('wheel-visual').classList.remove('spinning');
+    document.getElementById('wheel-spin-btn').disabled = false;
+    document.getElementById('wheel-target').textContent = '🎯 ' + msg.target_name;
+    document.getElementById('wheel-result').textContent = msg.result.text;
+    document.getElementById('wheel-round').textContent = '第' + msg.round + '轮';
+    let typelabel = msg.result.type === 'free' ? '🎁 福利' : msg.result.type === 'spend' ? '💸 请客' : msg.result.type === 'content' ? '📸 拍片' : msg.result.type === 'truth' ? '💬 真心话' : '😜 整活';
+    document.getElementById('wheel-punishment').innerHTML = '<div class="punishment-card"><div class="punish-label">' + typelabel + '</div><div class="punish-text">' + msg.result.text + '</div></div>';
+  }
+
+  if (type === 'gomoku_start') {
+    gs.gomokuTimer = msg.timer || 30;
+    gs.gomokuTimerStart = Date.now();
+    updateGomokuTimer();
+    renderGomokuBoard(msg.board);
+    document.getElementById('gomoku-turn-info').textContent = '⚫ ' + (msg.turn === gs.pid ? '你的回合' : '等待对方');
+    document.getElementById('gomoku-undo-btn').disabled = true;
+  }
+
+  if (type === 'gomoku_update') {
+    gs.gomokuTimerStart = Date.now();
+    updateGomokuTimer();
+    renderGomokuBoard(msg.board);
+    const myTurn = msg.turn === gs.pid;
+    document.getElementById('gomoku-turn-info').textContent = (myTurn ? '你的回合' : '等待对方');
+    document.getElementById('gomoku-undo-btn').disabled = !myTurn;
+    document.getElementById('gomoku-undo-btn').textContent = '↩ 悔棋';
+  }
+
+  if (type === 'gomoku_win') {
+    clearInterval(gs._gomokuTimerInt);
+    renderGomokuBoard(msg.board, msg.win_line);
+    document.getElementById('gomoku-turn-info').textContent = '🏆 ' + msg.winner_name + ' 赢了！';
+    document.getElementById('gomoku-undo-btn').disabled = true;
+    showVictory('🏆', msg.winner_name + ' 获胜！', '五子连珠 · 共' + (msg.move_count || '?') + '手');
+  }
+
+  if (type === 'gomoku_draw') {
+    clearInterval(gs._gomokuTimerInt);
+    renderGomokuBoard(msg.board);
+    document.getElementById('gomoku-turn-info').textContent = '平局！';
+    document.getElementById('gomoku-undo-btn').disabled = true;
+    showVictory('🤝', '平局！', '棋盘已满');
+  }
+
+  if (type === 'gomoku_timeout') {
+    clearInterval(gs._gomokuTimerInt);
+    renderGomokuBoard(msg.board);
+    document.getElementById('gomoku-turn-info').textContent = '⏰ 超时！';
+    document.getElementById('gomoku-undo-btn').disabled = true;
+    showVictory('⏰', msg.winner_name + ' 获胜！', msg.loser_name + ' 超时判负');
+  }
+
+  if (type === 'gomoku_undo_request') {
+    if (msg.to_pid === gs.pid) {
+      document.getElementById('gomoku-undo-btn').textContent = '对方请求悔棋...';
+      document.getElementById('gomoku-undo-btn').disabled = false;
+    }
+  }
+
+  if (type === 'gomoku_undo_done') {
+    gs.gomokuTimerStart = Date.now();
+    updateGomokuTimer();
+    renderGomokuBoard(msg.board);
+    document.getElementById('gomoku-turn-info').textContent = (msg.turn === gs.pid ? '你的回合' : '等待对方');
+    document.getElementById('gomoku-undo-btn').disabled = (msg.turn !== gs.pid);
+    document.getElementById('gomoku-undo-btn').textContent = '↩ 悔棋';
+    showToast('已悔棋');
+  }
+
+  if (type === 'gomoku_undo_rejected') {
+    document.getElementById('gomoku-undo-btn').textContent = '↩ 悔棋(被拒)';
+    setTimeout(() => { document.getElementById('gomoku-undo-btn').textContent = '↩ 悔棋'; }, 2000);
+    showToast(msg.from_name + ' 拒绝了悔棋', 'error');
+  }
+
+  if (type === 'rps_chosen') {
+    if (msg.pid === gs.pid) {
+      document.getElementById('rps-my-choice').textContent = '✅ 已选择';
+    } else {
+      document.getElementById('rps-result-text').textContent = '对方已选择...';
+    }
+  }
+
+  if (type === 'rps_result') {
+    const emoji = {rock: '✊', paper: '🖐️', scissors: '✌️'};
+    if (msg.p1.pid === gs.pid) {
+      document.getElementById('rps-my-choice').textContent = emoji[msg.p1.choice] || '?';
+    } else if (msg.p2.pid === gs.pid) {
+      document.getElementById('rps-my-choice').textContent = emoji[msg.p2.choice] || '?';
+    }
+    // Update scores
+    document.getElementById('rps-p1-score').textContent = (msg.scores && msg.scores[msg.p1.pid]) || 0;
+    document.getElementById('rps-p2-score').textContent = (msg.scores && msg.scores[msg.p2.pid]) || 0;
+    document.getElementById('rps-round-label').textContent = '三拳两胜 · 第' + (msg.round + 1) + '局';
+    // Set player names
+    if (msg.p1.pid === gs.pid) {
+      document.getElementById('rps-p1-name').textContent = '你';
+      document.getElementById('rps-p2-name').textContent = msg.p2.name;
+    } else {
+      document.getElementById('rps-p1-name').textContent = msg.p1.name;
+      document.getElementById('rps-p2-name').textContent = '你';
+    }
+    let resultText;
+    if (msg.winner === 'draw') resultText = '🤝 平局！';
+    else if (msg.winner === msg.p1.pid) resultText = msg.p1.name + ' 胜！';
+    else resultText = msg.p2.name + ' 胜！';
+    document.getElementById('rps-result-text').textContent = resultText;
+  }
+
+  if (type === 'rps_match_over') {
+    const iAmWinner = msg.winner_pid === gs.pid;
+    showVictory(iAmWinner ? '🏆' : '😢', msg.winner_name + ' 赢得比赛！', '三拳两胜 · 最终比分 ' + (msg.scores[msg.winner_pid] || 0) + ':' + (Object.values(msg.scores).reduce((a,b) => a+b, 0) - (msg.scores[msg.winner_pid] || 0)));
+  }
+
+  if (type === 'back_to_lobby') {
+    gs.game = null;
+    gs.roomCode = null;
+    gs.selectedGame = null;
+    hideAllGamePanels();
+    document.getElementById('game-lobby').style.display = 'none';
+    document.getElementById('game-select-screen').style.display = 'block';
+    document.getElementById('game-room-screen').style.display = 'none';
+    document.getElementById('game-entry').style.display = 'block';
+  }
+
+  if (type === 'error') {
+    showToast(msg.message, 'error');
+  }
+}
+
+function renderLobbyPlayers(players) {
+  const container = document.getElementById('lobby-players');
+  container.innerHTML = players.map(p =>
+    '<div class="player-chip">' +
+    '<span class="chip-emoji">' + (p.pid === gs.pid ? '⭐' : '🙂') + '</span>' +
+    '<span class="chip-name">' + p.name + '</span>' +
+    (p.pid === gs.pid ? '<span class="chip-you">我</span>' : '') +
+    '</div>'
+  ).join('');
+}
+
+function selectGame(gameType) {
+  var names = {dice:'摇骰子', wheel:'命运转盘', rps:'猜拳对决', gomoku:'五子棋'};
+  var emojis = {dice:'🎲', wheel:'🎡', rps:'✊', gomoku:'⚫'};
+  gs.selectedGame = gameType;
+  document.getElementById('game-select-screen').style.display = 'none';
+  document.getElementById('game-room-screen').style.display = 'block';
+  document.getElementById('selected-game-emoji').textContent = emojis[gameType];
+  document.getElementById('selected-game-name').textContent = names[gameType];
+}
+
+function backToGameSelect() {
+  document.getElementById('game-select-screen').style.display = 'block';
+  document.getElementById('game-room-screen').style.display = 'none';
+}
+
+function createGameRoom() {
+  sendGame({ action: 'create_room', pid: gs.pid, name: getGameNickname(), game: gs.selectedGame });
+}
+
+function joinGameRoom() {
+  const code = (document.getElementById('input-room-code').value || '').trim();
+  if (!code) { showToast('请输入房间码', 'error'); return; }
+  sendGame({ action: 'join_room', pid: gs.pid, name: getGameNickname(), room_code: code, game: gs.selectedGame });
+}
+
+function leaveGameRoom() {
+  sendGame({ action: 'leave_room', pid: gs.pid, room_code: gs.roomCode });
+  gs.roomCode = null;
+  gs.game = null;
+  hideAllGamePanels();
+  document.getElementById('game-lobby').style.display = 'none';
+  document.getElementById('game-entry').style.display = 'block';
+  document.getElementById('game-select-screen').style.display = 'block';
+  document.getElementById('game-room-screen').style.display = 'none';
+  gs.selectedGame = null;
+}
+
+function copyRoomCode() {
+  const code = document.getElementById('lobby-code').textContent;
+  navigator.clipboard.writeText(code).then(() => showToast('房间码已复制！'));
+}
+
+function startSelectedGame() {
+  if (!gs.selectedGame) { showToast('请先选择游戏', 'error'); return; }
+  startGame(gs.selectedGame);
+}
+function startGame(gameType) {
+  sendGame({ action: 'start_game', pid: gs.pid, room_code: gs.roomCode, game: gameType });
+}
+
+function backToLobby() {
+  sendGame({ action: 'back_to_lobby', pid: gs.pid, room_code: gs.roomCode });
+}
+
+function hideAllGamePanels() {
+  ['game-dice','game-wheel','game-gomoku','game-rps'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+}
+
+function showGamePanel(id) {
+  document.getElementById(id).style.display = 'block';
+}
+
+// === 骰子 ===
+function rollDice() {
+  document.getElementById('dice-roll-btn').disabled = true;
+  document.getElementById('dice-display').classList.add('rolling');
+  document.getElementById('dice-punishment').innerHTML = '';
+  document.getElementById('dice-results').innerHTML = '';
+  sendGame({ action: 'roll_dice', pid: gs.pid, room_code: gs.roomCode });
+}
+
+// === 转盘 ===
+function spinWheel() {
+  const btn = document.getElementById('wheel-spin-btn');
+  btn.disabled = true;
+  document.getElementById('wheel-visual').classList.add('spinning');
+  document.getElementById('wheel-result').textContent = '';
+  document.getElementById('wheel-target').textContent = '';
+  document.getElementById('wheel-punishment').innerHTML = '';
+  sendGame({ action: 'spin_wheel', pid: gs.pid, room_code: gs.roomCode });
+}
+
+// === 五子棋 ===
+function renderGomokuBoard(board, winLine) {
+  const container = document.getElementById('gomoku-board');
+  let html = '';
+  const wset = new Set();
+  if (winLine) winLine.forEach(p => wset.add(p[0] + ',' + p[1]));
+  for (let r = 0; r < 15; r++) {
+    for (let c = 0; c < 15; c++) {
+      const cell = board[r][c] || '';
+      const isWin = wset.has(r + ',' + c);
+      let cellHtml = '';
+      if (cell === '⚫') {
+        cellHtml = '<span class="gomoku-stone black"></span>';
+      } else if (cell === '⚪') {
+        cellHtml = '<span class="gomoku-stone white"></span>';
+      } else if (cell === 1) {
+        cellHtml = '<span class="gomoku-stone black"></span>';
+      } else if (cell === 2) {
+        cellHtml = '<span class="gomoku-stone white"></span>';
+      }
+      const cls = 'gomoku-cell' + (cell ? ' occupied' : '') + (isWin ? ' winline' : '');
+      html += '<div class="' + cls + '" onclick="gomokuMove(' + r + ',' + c + ')">' + cellHtml + '</div>';
+    }
+  }
+  container.innerHTML = html;
+}
+
+function gomokuMove(row, col) {
+  sendGame({ action: 'gomoku_move', pid: gs.pid, room_code: gs.roomCode, row: row, col: col });
+}
+
+// === 猜拳 ===
+function rpsChoose(choice) {
+  const emoji = { rock: '✊', paper: '🖐️', scissors: '✌️' };
+  document.getElementById('rps-my-choice').textContent = emoji[choice];
+  sendGame({ action: 'rps_choose', pid: gs.pid, room_code: gs.roomCode, choice: choice });
+}
+
+// === Tab切换时连接WS ===
+const origSwitchTab = switchTab;
+switchTab = function(tab) {
+  origSwitchTab(tab);
+  if (tab === 'game') {
+    connectWS();
+  }
+};
+
+// 监听页面关闭
+window.addEventListener('beforeunload', () => {
+  if (gs.roomCode) {
+    sendGame({ action: 'leave_room', pid: gs.pid, room_code: gs.roomCode });
+  }
+});
+
+// ============== 单人小游戏 ==============
+
+let _soloGameMode = 'multi'; // 'multi' or 'solo'
+
+function switchGameMode(mode, btn) {
+  _soloGameMode = mode;
+  document.querySelectorAll('.solo-game-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  if (mode === 'multi') {
+    document.getElementById('game-select-screen').style.display = 'block';
+    document.getElementById('solo-game-select').style.display = 'none';
+    document.getElementById('game-room-screen').style.display = 'none';
+    hideAllSoloGames();
+  } else {
+    document.getElementById('game-select-screen').style.display = 'none';
+    document.getElementById('game-room-screen').style.display = 'none';
+    document.getElementById('solo-game-select').style.display = 'block';
+    document.getElementById('game-lobby').style.display = 'none';
+    hideAllGamePanels();
+  }
+}
+
+function hideAllSoloGames() {
+  ['solo-snake','solo-tetris','solo-2048'].forEach(id => {
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function startSoloGame(game) {
+  document.getElementById('solo-game-select').style.display = 'none';
+  hideAllSoloGames();
+  var el = document.getElementById('solo-' + game);
+  if (el) el.style.display = 'block';
+  if (game === 'snake') snakeInit();
+  if (game === 'tetris') tetrisInit();
+  if (game === '2048') g2048Init();
+}
+
+function backToSoloSelect() {
+  // Stop any running game
+  if (window._snakeInterval) { clearInterval(window._snakeInterval); window._snakeInterval = null; }
+  if (window._tetrisInterval) { clearInterval(window._tetrisInterval); window._tetrisInterval = null; }
+  hideAllSoloGames();
+  document.getElementById('solo-game-select').style.display = 'block';
+}
+
+// ===================== 贪吃蛇 =====================
+const SNAKE_SIZE = 15;
+let snake = [];
+let snakeFood = {};
+let snakeDir = 'right';
+let snakeNextDir = 'right';
+let snakeRunning = false;
+let snakePaused = false;
+let snakeScore = 0;
+
+function snakeInit() {
+  var canvas = document.getElementById('snake-canvas');
+  var ctx = canvas.getContext('2d');
+  snakeReset();
+  snakeDraw(ctx);
+  document.getElementById('snake-start-btn').style.display = 'inline-block';
+  document.getElementById('snake-pause-btn').style.display = 'none';
+  document.getElementById('snake-gameover').style.display = 'none';
+  document.getElementById('snake-hint').textContent = '点击「开始游戏」开始';
+}
+
+function snakeReset() {
+  var mid = Math.floor(SNAKE_SIZE / 2);
+  snake = [{x: mid, y: mid}, {x: mid-1, y: mid}, {x: mid-2, y: mid}];
+  snakeDir = 'right';
+  snakeNextDir = 'right';
+  snakeScore = 0;
+  document.getElementById('snake-score').textContent = '0';
+  snakeSpawnFood();
+}
+
+function snakeSpawnFood() {
+  var occupied = new Set(snake.map(s => s.x + ',' + s.y));
+  var candidates = [];
+  for (var i = 0; i < SNAKE_SIZE; i++) {
+    for (var j = 0; j < SNAKE_SIZE; j++) {
+      if (!occupied.has(i + ',' + j)) candidates.push({x: i, y: j});
+    }
+  }
+  if (candidates.length > 0) {
+    snakeFood = candidates[Math.floor(Math.random() * candidates.length)];
+  }
+}
+
+function snakeDraw(ctx) {
+  var size = 300 / SNAKE_SIZE;
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, 300, 300);
+  
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 0.5;
+  for (var i = 0; i <= SNAKE_SIZE; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * size, 0);
+    ctx.lineTo(i * size, 300);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, i * size);
+    ctx.lineTo(300, i * size);
+    ctx.stroke();
+  }
+  
+  // Snake
+  for (var i = 0; i < snake.length; i++) {
+    var s = snake[i];
+    var gradient = ctx.createRadialGradient(
+      s.x * size + size/2, s.y * size + size/2, 1,
+      s.x * size + size/2, s.y * size + size/2, size * 0.7
+    );
+    if (i === 0) {
+      gradient.addColorStop(0, '#4ecca3');
+      gradient.addColorStop(1, '#2d9b7a');
+    } else {
+      gradient.addColorStop(0, '#3cb88a');
+      gradient.addColorStop(1, '#2d7a60');
+    }
+    ctx.fillStyle = gradient;
+    ctx.shadowColor = i === 0 ? '#4ecca3' : 'transparent';
+    ctx.shadowBlur = i === 0 ? 8 : 0;
+    ctx.beginPath();
+    ctx.roundRect(s.x * size + 1, s.y * size + 1, size - 2, size - 2, 3);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+  
+  // Food
+  ctx.fillStyle = '#ff6b6b';
+  ctx.shadowColor = '#ff6b6b';
+  ctx.shadowBlur = 10;
+  ctx.beginPath();
+  ctx.arc(snakeFood.x * size + size/2, snakeFood.y * size + size/2, size/2 - 2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function snakeTick() {
+  if (!snakeRunning || snakePaused) return;
+  snakeDir = snakeNextDir;
+  
+  var head = {x: snake[0].x, y: snake[0].y};
+  if (snakeDir === 'right') head.x++;
+  else if (snakeDir === 'left') head.x--;
+  else if (snakeDir === 'up') head.y--;
+  else if (snakeDir === 'down') head.y++;
+  
+  // Wrap around or wall collision
+  if (head.x < 0 || head.x >= SNAKE_SIZE || head.y < 0 || head.y >= SNAKE_SIZE) {
+    snakeGameOver();
+    return;
+  }
+  
+  // Self collision
+  for (var i = 0; i < snake.length; i++) {
+    if (snake[i].x === head.x && snake[i].y === head.y) {
+      snakeGameOver();
+      return;
+    }
+  }
+  
+  snake.unshift(head);
+  
+  // Eat food
+  if (head.x === snakeFood.x && head.y === snakeFood.y) {
+    snakeScore += 10;
+    document.getElementById('snake-score').textContent = snakeScore;
+    snakeSpawnFood();
+  } else {
+    snake.pop();
+  }
+  
+  var canvas = document.getElementById('snake-canvas');
+  var ctx = canvas.getContext('2d');
+  snakeDraw(ctx);
+}
+
+function snakeGameOver() {
+  snakeRunning = false;
+  if (window._snakeInterval) { clearInterval(window._snakeInterval); window._snakeInterval = null; }
+  document.getElementById('snake-final-score').textContent = '得分: ' + snakeScore;
+  document.getElementById('snake-gameover').style.display = 'flex';
+  document.getElementById('snake-start-btn').style.display = 'inline-block';
+  document.getElementById('snake-start-btn').textContent = '再来一局';
+  document.getElementById('snake-pause-btn').style.display = 'none';
+}
+
+function snakeStart() {
+  snakeReset();
+  snakeRunning = true;
+  snakePaused = false;
+  document.getElementById('snake-gameover').style.display = 'none';
+  document.getElementById('snake-start-btn').style.display = 'none';
+  document.getElementById('snake-pause-btn').style.display = 'inline-block';
+  document.getElementById('snake-pause-btn').textContent = '暂停';
+  document.getElementById('snake-hint').textContent = '方向键 / 滑动控制方向';
+  
+  if (window._snakeInterval) clearInterval(window._snakeInterval);
+  window._snakeInterval = setInterval(snakeTick, 150);
+}
+
+function snakeTogglePause() {
+  snakePaused = !snakePaused;
+  document.getElementById('snake-pause-btn').textContent = snakePaused ? '继续' : '暂停';
+  document.getElementById('snake-hint').textContent = snakePaused ? '已暂停' : '方向键 / 滑动控制方向';
+}
+
+// ===================== 俄罗斯方块 =====================
+const TETRIS_COLS = 10;
+const TETRIS_ROWS = 20;
+const TETRIS_SIZE = 20;
+let tetrisBoard = [];
+let tetrisPiece = null;
+let tetrisNextPiece = null;
+let tetrisScore = 0;
+let tetrisRunning = false;
+let tetrisPaused = false;
+let tetrisLines = 0;
+
+const TETRIS_SHAPES = [
+  { // I
+    matrix: [[1,1,1,1]],
+    color: '#45b7d1'
+  },
+  { // O
+    matrix: [[1,1],[1,1]],
+    color: '#f7dc6f'
+  },
+  { // T
+    matrix: [[0,1,0],[1,1,1]],
+    color: '#9b59b6'
+  },
+  { // S
+    matrix: [[0,1,1],[1,1,0]],
+    color: '#2ecc71'
+  },
+  { // Z
+    matrix: [[1,1,0],[0,1,1]],
+    color: '#e74c3c'
+  },
+  { // L
+    matrix: [[1,0,0],[1,1,1]],
+    color: '#e67e22'
+  },
+  { // J
+    matrix: [[0,0,1],[1,1,1]],
+    color: '#3498db'
+  }
+];
+
+function tetrisInit() {
+  tetrisBoard = [];
+  for (var r = 0; r < TETRIS_ROWS; r++) {
+    tetrisBoard[r] = [];
+    for (var c = 0; c < TETRIS_COLS; c++) {
+      tetrisBoard[r][c] = 0;
+    }
+  }
+  tetrisScore = 0;
+  tetrisLines = 0;
+  document.getElementById('tetris-score').textContent = '0';
+  document.getElementById('tetris-start-btn').style.display = 'inline-block';
+  document.getElementById('tetris-pause-btn').style.display = 'none';
+  document.getElementById('tetris-gameover').style.display = 'none';
+  
+  tetrisNextPiece = tetrisRandomPiece();
+  tetrisDraw();
+  tetrisDrawNext();
+}
+
+function tetrisRandomPiece() {
+  var idx = Math.floor(Math.random() * TETRIS_SHAPES.length);
+  var shape = TETRIS_SHAPES[idx];
+  return {
+    matrix: shape.matrix.map(row => [...row]),
+    color: shape.color,
+    x: Math.floor((TETRIS_COLS - shape.matrix[0].length) / 2),
+    y: 0
+  };
+}
+
+function tetrisStart() {
+  tetrisInit();
+  tetrisPiece = tetrisNextPiece;
+  tetrisNextPiece = tetrisRandomPiece();
+  tetrisRunning = true;
+  tetrisPaused = false;
+  document.getElementById('tetris-start-btn').style.display = 'none';
+  document.getElementById('tetris-pause-btn').style.display = 'inline-block';
+  document.getElementById('tetris-pause-btn').textContent = '暂停';
+  document.getElementById('tetris-gameover').style.display = 'none';
+  tetrisDraw();
+  tetrisDrawNext();
+  
+  if (window._tetrisInterval) clearInterval(window._tetrisInterval);
+  window._tetrisInterval = setInterval(tetrisTick, 400);
+}
+
+function tetrisTick() {
+  if (!tetrisRunning || tetrisPaused) return;
+  if (!tetrisMove(0, 1)) {
+    tetrisLock();
+  }
+}
+
+function tetrisMove(dx, dy) {
+  if (!tetrisPiece) return false;
+  for (var r = 0; r < tetrisPiece.matrix.length; r++) {
+    for (var c = 0; c < tetrisPiece.matrix[r].length; c++) {
+      if (tetrisPiece.matrix[r][c]) {
+        var nx = tetrisPiece.x + c + dx;
+        var ny = tetrisPiece.y + r + dy;
+        if (nx < 0 || nx >= TETRIS_COLS || ny >= TETRIS_ROWS) return false;
+        if (ny >= 0 && tetrisBoard[ny][nx]) return false;
+      }
+    }
+  }
+  tetrisPiece.x += dx;
+  tetrisPiece.y += dy;
+  tetrisDraw();
+  return true;
+}
+
+function tetrisRotate() {
+  if (!tetrisPiece) return;
+  var matrix = tetrisPiece.matrix;
+  var rotated = matrix[0].map((_, i) => matrix.map(row => row[i]).reverse());
+  // Check collision
+  for (var r = 0; r < rotated.length; r++) {
+    for (var c = 0; c < rotated[r].length; c++) {
+      if (rotated[r][c]) {
+        var nx = tetrisPiece.x + c;
+        var ny = tetrisPiece.y + r;
+        if (nx < 0 || nx >= TETRIS_COLS || ny >= TETRIS_ROWS) return;
+        if (ny >= 0 && tetrisBoard[ny][nx]) return;
+      }
+    }
+  }
+  tetrisPiece.matrix = rotated;
+  tetrisDraw();
+}
+
+function tetrisLock() {
+  if (!tetrisPiece) return;
+  for (var r = 0; r < tetrisPiece.matrix.length; r++) {
+    for (var c = 0; c < tetrisPiece.matrix[r].length; c++) {
+      if (tetrisPiece.matrix[r][c]) {
+        var ny = tetrisPiece.y + r;
+        var nx = tetrisPiece.x + c;
+        if (ny < 0) {
+          tetrisGameOver();
+          return;
+        }
+        tetrisBoard[ny][nx] = tetrisPiece.color;
+      }
+    }
+  }
+  
+  // Clear full lines
+  var cleared = 0;
+  for (var r = TETRIS_ROWS - 1; r >= 0; r--) {
+    var full = true;
+    for (var c = 0; c < TETRIS_COLS; c++) {
+      if (!tetrisBoard[r][c]) { full = false; break; }
+    }
+    if (full) {
+      tetrisBoard.splice(r, 1);
+      tetrisBoard.unshift(new Array(TETRIS_COLS).fill(0));
+      cleared++;
+      r++; // Check same row again
+    }
+  }
+  
+  if (cleared > 0) {
+    var points = [0, 100, 300, 500, 800];
+    tetrisScore += points[Math.min(cleared, 4)];
+    tetrisLines += cleared;
+    document.getElementById('tetris-score').textContent = tetrisScore;
+  }
+  
+  // New piece
+  tetrisPiece = tetrisNextPiece;
+  tetrisNextPiece = tetrisRandomPiece();
+  tetrisPiece.x = Math.floor((TETRIS_COLS - tetrisPiece.matrix[0].length) / 2);
+  tetrisPiece.y = 0;
+  
+  // Check game over
+  for (var c = 0; c < tetrisPiece.matrix[0].length; c++) {
+    if (tetrisPiece.matrix[0][c] && tetrisBoard[0][c]) {
+      tetrisGameOver();
+      return;
+    }
+  }
+  
+  tetrisDraw();
+  tetrisDrawNext();
+}
+
+function tetrisGameOver() {
+  tetrisRunning = false;
+  if (window._tetrisInterval) { clearInterval(window._tetrisInterval); window._tetrisInterval = null; }
+  document.getElementById('tetris-final-score').textContent = '得分: ' + tetrisScore;
+  document.getElementById('tetris-gameover').style.display = 'flex';
+  document.getElementById('tetris-start-btn').style.display = 'inline-block';
+  document.getElementById('tetris-start-btn').textContent = '再来一局';
+  document.getElementById('tetris-pause-btn').style.display = 'none';
+}
+
+function tetrisTogglePause() {
+  tetrisPaused = !tetrisPaused;
+  document.getElementById('tetris-pause-btn').textContent = tetrisPaused ? '继续' : '暂停';
+}
+
+function tetrisDraw() {
+  var canvas = document.getElementById('tetris-canvas');
+  var ctx = canvas.getContext('2d');
+  
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, TETRIS_COLS * TETRIS_SIZE, TETRIS_ROWS * TETRIS_SIZE);
+  
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 0.5;
+  for (var r = 0; r <= TETRIS_ROWS; r++) {
+    ctx.beginPath();
+    ctx.moveTo(0, r * TETRIS_SIZE);
+    ctx.lineTo(TETRIS_COLS * TETRIS_SIZE, r * TETRIS_SIZE);
+    ctx.stroke();
+  }
+  for (var c = 0; c <= TETRIS_COLS; c++) {
+    ctx.beginPath();
+    ctx.moveTo(c * TETRIS_SIZE, 0);
+    ctx.lineTo(c * TETRIS_SIZE, TETRIS_ROWS * TETRIS_SIZE);
+    ctx.stroke();
+  }
+  
+  // Board
+  for (var r = 0; r < TETRIS_ROWS; r++) {
+    for (var c = 0; c < TETRIS_COLS; c++) {
+      if (tetrisBoard[r][c]) {
+        ctx.fillStyle = tetrisBoard[r][c];
+        ctx.shadowColor = tetrisBoard[r][c];
+        ctx.shadowBlur = 4;
+        ctx.beginPath();
+        ctx.roundRect(c * TETRIS_SIZE + 1, r * TETRIS_SIZE + 1, TETRIS_SIZE - 2, TETRIS_SIZE - 2, 3);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+  }
+  
+  // Current piece
+  if (tetrisPiece) {
+    for (var r = 0; r < tetrisPiece.matrix.length; r++) {
+      for (var c = 0; c < tetrisPiece.matrix[r].length; c++) {
+        if (tetrisPiece.matrix[r][c]) {
+          var px = (tetrisPiece.x + c) * TETRIS_SIZE;
+          var py = (tetrisPiece.y + r) * TETRIS_SIZE;
+          ctx.fillStyle = tetrisPiece.color;
+          ctx.shadowColor = tetrisPiece.color;
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.roundRect(px + 1, py + 1, TETRIS_SIZE - 2, TETRIS_SIZE - 2, 3);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+    }
+  }
+}
+
+function tetrisDrawNext() {
+  var canvas = document.getElementById('tetris-next');
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, 80, 80);
+  
+  if (tetrisNextPiece) {
+    var m = tetrisNextPiece.matrix;
+    var cellSize = 16;
+    var offsetX = (80 - m[0].length * cellSize) / 2;
+    var offsetY = (80 - m.length * cellSize) / 2;
+    for (var r = 0; r < m.length; r++) {
+      for (var c = 0; c < m[r].length; c++) {
+        if (m[r][c]) {
+          ctx.fillStyle = tetrisNextPiece.color;
+          ctx.shadowColor = tetrisNextPiece.color;
+          ctx.shadowBlur = 4;
+          ctx.beginPath();
+          ctx.roundRect(offsetX + c * cellSize + 1, offsetY + r * cellSize + 1, cellSize - 2, cellSize - 2, 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+    }
+  }
+}
+
+// ===================== 2048 =====================
+let g2048Board = [];
+let g2048Score = 0;
+
+function g2048Init() {
+  g2048Board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+  g2048Score = 0;
+  document.getElementById('g2048-score').textContent = '0';
+  document.getElementById('g2048-gameover').style.display = 'none';
+  g2048AddRandom();
+  g2048AddRandom();
+  g2048Render();
+}
+
+function g2048Start() {
+  g2048Init();
+}
+
+function g2048AddRandom() {
+  var empty = [];
+  for (var r = 0; r < 4; r++) {
+    for (var c = 0; c < 4; c++) {
+      if (g2048Board[r][c] === 0) empty.push({r: r, c: c});
+    }
+  }
+  if (empty.length > 0) {
+    var cell = empty[Math.floor(Math.random() * empty.length)];
+    g2048Board[cell.r][cell.c] = Math.random() < 0.9 ? 2 : 4;
+  }
+}
+
+function g2048Render() {
+  var grid = document.getElementById('g2048-grid');
+  grid.innerHTML = '';
+  for (var r = 0; r < 4; r++) {
+    for (var c = 0; c < 4; c++) {
+      var val = g2048Board[r][c];
+      var cell = document.createElement('div');
+      cell.className = 'cell-2048' + (val ? ' t' + val : '');
+      cell.textContent = val || '';
+      grid.appendChild(cell);
+    }
+  }
+}
+
+function g2048Move(direction) {
+  if (document.getElementById('g2048-gameover').style.display === 'flex') return;
+  
+  var moved = false;
+  var oldScore = g2048Score;
+  
+  if (direction === 'left') moved = g2048SlideLeft();
+  else if (direction === 'right') moved = g2048SlideRight();
+  else if (direction === 'up') moved = g2048SlideUp();
+  else if (direction === 'down') moved = g2048SlideDown();
+  
+  if (moved) {
+    g2048AddRandom();
+    g2048Render();
+    document.getElementById('g2048-score').textContent = g2048Score;
+    
+    // Check game over
+    if (g2048IsGameOver()) {
+      document.getElementById('g2048-go-title').textContent = '游戏结束';
+      document.getElementById('g2048-final-score').textContent = '得分: ' + g2048Score;
+      document.getElementById('g2048-gameover').style.display = 'flex';
+    }
+    
+    // Check win
+    for (var r = 0; r < 4; r++) {
+      for (var c = 0; c < 4; c++) {
+        if (g2048Board[r][c] === 2048) {
+          document.getElementById('g2048-go-title').textContent = '🎉 你赢了！';
+          document.getElementById('g2048-final-score').textContent = '得分: ' + g2048Score;
+          document.getElementById('g2048-gameover').style.display = 'flex';
+          return;
+        }
+      }
+    }
+  }
+}
+
+function g2048SlideLeft() {
+  var moved = false;
+  for (var r = 0; r < 4; r++) {
+    var row = g2048Board[r].filter(v => v !== 0);
+    // Merge
+    for (var i = 0; i < row.length - 1; i++) {
+      if (row[i] === row[i+1]) {
+        row[i] *= 2;
+        g2048Score += row[i];
+        row.splice(i+1, 1);
+        moved = true;
+      }
+    }
+    while (row.length < 4) row.push(0);
+    for (var c = 0; c < 4; c++) {
+      if (g2048Board[r][c] !== row[c]) moved = true;
+      g2048Board[r][c] = row[c];
+    }
+  }
+  return moved;
+}
+
+function g2048SlideRight() {
+  var moved = false;
+  for (var r = 0; r < 4; r++) {
+    var row = g2048Board[r].filter(v => v !== 0);
+    for (var i = row.length - 1; i > 0; i--) {
+      if (row[i] === row[i-1]) {
+        row[i] *= 2;
+        g2048Score += row[i];
+        row.splice(i-1, 1);
+        i--;
+        moved = true;
+      }
+    }
+    while (row.length < 4) row.unshift(0);
+    for (var c = 0; c < 4; c++) {
+      if (g2048Board[r][c] !== row[c]) moved = true;
+      g2048Board[r][c] = row[c];
+    }
+  }
+  return moved;
+}
+
+function g2048SlideUp() {
+  var moved = false;
+  for (var c = 0; c < 4; c++) {
+    var col = [];
+    for (var r = 0; r < 4; r++) col.push(g2048Board[r][c]);
+    col = col.filter(v => v !== 0);
+    for (var i = 0; i < col.length - 1; i++) {
+      if (col[i] === col[i+1]) {
+        col[i] *= 2;
+        g2048Score += col[i];
+        col.splice(i+1, 1);
+        moved = true;
+      }
+    }
+    while (col.length < 4) col.push(0);
+    for (var r = 0; r < 4; r++) {
+      if (g2048Board[r][c] !== col[r]) moved = true;
+      g2048Board[r][c] = col[r];
+    }
+  }
+  return moved;
+}
+
+function g2048SlideDown() {
+  var moved = false;
+  for (var c = 0; c < 4; c++) {
+    var col = [];
+    for (var r = 0; r < 4; r++) col.push(g2048Board[r][c]);
+    col = col.filter(v => v !== 0);
+    for (var i = col.length - 1; i > 0; i--) {
+      if (col[i] === col[i-1]) {
+        col[i] *= 2;
+        g2048Score += col[i];
+        col.splice(i-1, 1);
+        i--;
+        moved = true;
+      }
+    }
+    while (col.length < 4) col.unshift(0);
+    for (var r = 0; r < 4; r++) {
+      if (g2048Board[r][c] !== col[r]) moved = true;
+      g2048Board[r][c] = col[r];
+    }
+  }
+  return moved;
+}
+
+function g2048IsGameOver() {
+  for (var r = 0; r < 4; r++) {
+    for (var c = 0; c < 4; c++) {
+      if (g2048Board[r][c] === 0) return false;
+      if (c < 3 && g2048Board[r][c] === g2048Board[r][c+1]) return false;
+      if (r < 3 && g2048Board[r][c] === g2048Board[r+1][c]) return false;
+    }
+  }
+  return true;
+}
+
+// ===================== 键盘控制 =====================
+document.addEventListener('keydown', function(e) {
+  // Snake controls
+  if (snakeRunning && !snakePaused && document.getElementById('solo-snake').style.display === 'block') {
+    var keyMap = {ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right'};
+    var dir = keyMap[e.key];
+    if (dir) {
+      e.preventDefault();
+      var opposites = {up: 'down', down: 'up', left: 'right', right: 'left'};
+      if (dir !== opposites[snakeDir]) {
+        snakeNextDir = dir;
+      }
+    }
+  }
+  
+  // Tetris controls
+  if (tetrisRunning && !tetrisPaused && document.getElementById('solo-tetris').style.display === 'block') {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); tetrisMove(-1, 0); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); tetrisMove(1, 0); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); tetrisMove(0, 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); tetrisRotate(); }
+    else if (e.key === ' ' || e.key === 'Space') { e.preventDefault(); while(tetrisMove(0,1)){} tetrisLock(); }
+  }
+  
+  // 2048 controls
+  if (document.getElementById('solo-2048').style.display === 'block') {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); g2048Move('left'); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); g2048Move('right'); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); g2048Move('up'); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); g2048Move('down'); }
+  }
+});
+
+// ===================== 触摸控制 =====================
+(function() {
+  var startX, startY;
+  document.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive: true});
+  document.addEventListener('touchend', function(e) {
+    if (!startX || !startY) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    var absDx = Math.abs(dx), absDy = Math.abs(dy);
+    if (absDx < 20 && absDy < 20) return;
+    
+    // Snake swipe
+    if (snakeRunning && !snakePaused && document.getElementById('solo-snake').style.display === 'block') {
+      var opposites = {up: 'down', down: 'up', left: 'right', right: 'left'};
+      var dir;
+      if (absDx > absDy) dir = dx > 0 ? 'right' : 'left';
+      else dir = dy > 0 ? 'down' : 'up';
+      if (dir !== opposites[snakeDir]) snakeNextDir = dir;
+    }
+    
+    // Tetris swipe
+    if (tetrisRunning && !tetrisPaused && document.getElementById('solo-tetris').style.display === 'block') {
+      if (absDx > absDy) {
+        if (dx > 0) tetrisMove(1, 0);
+        else tetrisMove(-1, 0);
+      } else {
+        if (dy > 0) tetrisMove(0, 1);
+        else tetrisRotate();
+      }
+    }
+    
+    // 2048 swipe
+    if (document.getElementById('solo-2048').style.display === 'block') {
+      if (absDx > absDy) g2048Move(dx > 0 ? 'right' : 'left');
+      else g2048Move(dy > 0 ? 'down' : 'up');
+    }
+    
+    startX = startY = null;
+  }, {passive: true});
+})();
+
+// ============== V2 新功能 ==============
+
+// 骰子模式切换
+function setDiceMode(mode, btn) {
+  document.querySelectorAll('.dice-mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('dice-party-area').style.display = (mode === 'merchant') ? 'none' : 'block';
+  document.getElementById('dice-merchant-area').style.display = (mode === 'merchant') ? 'block' : 'none';
+  document.getElementById('dice-rules').style.display = (mode === 'merchant') ? 'block' : 'none';
+  sendGame({ action: 'dice_set_mode', pid: gs.pid, room_code: gs.roomCode, mode: mode });
+}
+
+// 商家对战摇骰子
+function rollDiceMerchant() {
+  const phone = (document.getElementById('dice-m-phone').value || '').trim();
+  if (!phone || phone.length < 7) {
+    showToast('请输入有效手机号', 'error');
+    return;
+  }
+  document.getElementById('dice-m-vs').style.display = 'none';
+  document.getElementById('dice-m-reward').innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2)">🎲 掷骰中...</div>';
+  sendGame({ action: 'dice_battle', pid: gs.pid, phone: phone });
+}
+
+// 五子棋悔棋
+function gomokuRequestUndo() {
+  const btn = document.getElementById('gomoku-undo-btn');
+  if (btn.textContent === '对方请求悔棋...') {
+    // Accept undo
+    sendGame({ action: 'gomoku_undo_response', pid: gs.pid, room_code: gs.roomCode, accept: true });
+    btn.textContent = '↩ 悔棋';
+    btn.disabled = true;
+  } else if (btn.textContent === '↩ 悔棋') {
+    // Request undo
+    btn.textContent = '等待同意...';
+    btn.disabled = true;
+    sendGame({ action: 'gomoku_undo', pid: gs.pid, room_code: gs.roomCode });
+  }
+}
+
+// 五子棋计时器
+function updateGomokuTimer() {
+  clearInterval(gs._gomokuTimerInt);
+  const bar = document.getElementById('gomoku-timer-fill');
+  if (!bar) return;
+  const limit = gs.gomokuTimer || 30;
+  gs._gomokuTimerInt = setInterval(function() {
+    const elapsed = (Date.now() - (gs.gomokuTimerStart || Date.now())) / 1000;
+    const pct = Math.max(0, 100 - (elapsed / limit) * 100);
+    bar.style.width = pct + '%';
+    if (pct < 25) bar.classList.add('urgent');
+    else bar.classList.remove('urgent');
+    if (pct <= 0) clearInterval(gs._gomokuTimerInt);
+  }, 200);
+}
+
+// 通用胜利弹窗
+function showVictory(emoji, title, subtitle) {
+  const overlay = document.createElement('div');
+  overlay.className = 'victory-overlay';
+  overlay.innerHTML = '<div class="victory-modal">' +
+    '<div class="victory-emoji">' + emoji + '</div>' +
+    '<div class="victory-title">' + title + '</div>' +
+    '<div class="victory-subtitle">' + subtitle + '</div>' +
+    '<button class="victory-btn" onclick="this.closest(\'.victory-overlay\').remove(); backToLobby()">回到大厅</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) { overlay.remove(); backToLobby(); }
+  });
+}
+
+/* ============ ACTION SHEET: Camera / Album ============ */
+const activePickSegment = {id: null};
+
+function showPicker(segmentId) {
+  activePickSegment.id = segmentId;
+  document.getElementById('act-overlay').classList.add('active');
+}
+
+function hidePicker() {
+  document.getElementById('act-overlay').classList.remove('active');
+  activePickSegment.id = null;
+}
+
+function pickCamera() {
+  const segId = activePickSegment.id;
+  hidePicker();
+  if (!segId) return;
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'video/*';
+  input.setAttribute('capture', 'environment');
+  input.style.display = 'none';
+  input.onchange = function(e) {
+    if (e.target.files && e.target.files[0]) uploadFile(e.target.files[0], segId);
+    e.target.remove();
+  };
+  document.body.appendChild(input);
+  input.click();
+}
+
+function pickAlbum() {
+  const segId = activePickSegment.id;
+  hidePicker();
+  if (!segId) return;
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'video/*,.mp4,.mov,.webm,image/*,.jpg,.jpeg,.png,.heic,.webp';
+  input.style.display = 'none';
+  input.onchange = function(e) {
+    if (e.target.files && e.target.files[0]) uploadFile(e.target.files[0], segId);
+    e.target.remove();
+  };
+  document.body.appendChild(input);
+  input.click();
+}
+
+/* Pick a photo (take photo with camera) */
+function pickPhoto() {
+  const segId = activePickSegment.id;
+  hidePicker();
+  if (!segId) return;
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.setAttribute('capture', 'environment');
+  input.style.display = 'none';
+  input.onchange = function(e) {
+    if (e.target.files && e.target.files[0]) uploadFile(e.target.files[0], segId);
+    e.target.remove();
+  };
+  document.body.appendChild(input);
+  input.click();
+}
+
+/* Delete uploaded segment */
+function deleteSegment(segmentId, e) {
+  e.stopPropagation();
+  if (!confirm('确定删除已上传的 ' + segmentId + ' 段视频吗？')) return;
+  delete state.uploadedSegments[segmentId];
+  // Revoke object URL
+  if (window._previewUrls && window._previewUrls[segmentId]) {
+    URL.revokeObjectURL(window._previewUrls[segmentId]);
+    delete window._previewUrls[segmentId];
+  }
+  const slot = document.getElementById('slot-' + segmentId);
+  if (slot) {
+    slot.classList.remove('filled');
+    slot.querySelector('.slot-icon').textContent = '📹';
+    slot.querySelector('.slot-status').style.display = 'none';
+    const preview = document.getElementById('preview-' + segmentId);
+    if (preview) {
+      preview.querySelector('video').src = '';
+      preview.querySelector('video').style.display = 'none';
+      preview.querySelector('img').src = '';
+      preview.querySelector('img').style.display = 'none';
+    }
+  }
+  updateMergeButton();
+  showToast('已删除', 'success');
+}
+
+/* Go back to step 1 */
+function goBackToStep1() {
+  switchStep(1);
+}
+
+/* ============ BGM Playback (client-side audio overlay) ============ */
+let bgmAudio = null;
+let bgmActiveTpl = null;
+
+function toggleBGM(tplId, btn) {
+  const bgmFiles = {bestie:'bgm_bestie.mp3', solo:'bgm_solo.mp3', dish:'bgm_dish.mp3'};
+  const video = document.getElementById('result-video');
+  
+  // If same BGM is playing, stop it
+  if (bgmActiveTpl === tplId && bgmAudio && !bgmAudio.paused) {
+    bgmAudio.pause();
+    bgmAudio.currentTime = 0;
+    bgmActiveTpl = null;
+    document.querySelectorAll('.bgm-btn').forEach(b => b.classList.remove('playing','selected'));
+    return;
+  }
+  
+  // Stop previous BGM
+  if (bgmAudio) { bgmAudio.pause(); bgmAudio = null; }
+  document.querySelectorAll('.bgm-btn').forEach(b => b.classList.remove('playing','selected'));
+  
+  // Start new BGM
+  bgmAudio = new Audio(bgmFiles[tplId]);
+  bgmAudio.loop = true;
+  bgmAudio.volume = 0.3;
+  bgmActiveTpl = tplId;
+  
+  // Sync play/pause with video
+  const syncPlay = () => { if (bgmAudio && bgmActiveTpl) bgmAudio.play(); };
+  const syncPause = () => { if (bgmAudio) bgmAudio.pause(); };
+  video.addEventListener('play', syncPlay);
+  video.addEventListener('pause', syncPause);
+  video.addEventListener('ended', () => { if (bgmAudio) { bgmAudio.pause(); bgmAudio.currentTime = 0; }});
+  
+  // If video is already playing, start BGM
+  if (!video.paused) bgmAudio.play();
+  
+  btn.classList.add('selected','playing');
+}
+
+</script>
+
+<!-- Action Sheet: Camera / Album -->
+<div class="act-overlay" id="act-overlay" onclick="if(event.target===this)hidePicker()">
+  <div class="act-sheet">
+    <div class="act-title">选择素材来源</div>
+    <button class="act-btn" onclick="pickCamera()">
+      <span class="act-icon">🎥</span>
+      <span>拍摄视频</span>
+    </button>
+    <button class="act-btn" onclick="pickPhoto()">
+      <span class="act-icon">📸</span>
+      <span>拍照</span>
+    </button>
+    <button class="act-btn" onclick="pickAlbum()">
+      <span class="act-icon">🖼️</span>
+      <span>从相册选择</span>
+    </button>
+    <button class="act-cancel" onclick="hidePicker()">取消</button>
+  </div>
+</div>
+
+</body>
+</html>

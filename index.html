@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>芸山杉 · 出片计划</title>
+<style>
+/* ============ RESET & BASE ============ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh;
+  --bg:#faf7f2;--bg2:#f3efe7;--text:#2c2416;--text2:#8a7e6e;--text3:#b8a99a;--card:#fff;
+  --primary:#d4786e;--primary-light:#e8a8a0;--primary-dark:#b85a50;
+  --accent:#c8963e;--accent-light:#e8c97a;
+  --border:#e8e2d6;--border-light:#f0ebe0;
+  --success:#7a9a6e;--error:#c4645a;
+  --radius:16px;--radius-sm:10px;
+  --shadow-sm:0 1px 3px rgba(44,36,22,0.04);
+  --shadow:0 2px 12px rgba(44,36,22,0.06);
+  --shadow-md:0 4px 20px rgba(44,36,22,0.08);
+  --shadow-lg:0 8px 32px rgba(44,36,22,0.10);
+}
+
+/* ============ HERO ============ */
+.hero{position:relative;width:100%;line-height:0;background:#1a1612;overflow:hidden}
+.hero img{width:100%;height:auto;display:block}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(26,22,18,0.15) 0%,
+    rgba(26,22,18,0.0) 30%,
+    rgba(26,22,18,0.0) 60%,
+    rgba(26,22,18,0.3) 80%,
+    var(--bg) 100%);
+}
+.hero-badge{
+  position:absolute;top:16px;right:16px;
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  padding:6px 14px;border-radius:20px;
+  font-size:12px;font-weight:600;color:var(--primary-dark);
+  letter-spacing:1px;box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* ============ INCENTIVE BANNER (sticky under hero) ============ */
+.incentive-banner{
+  position:relative;z-index:10;
+  margin:-24px 16px 0;padding:20px 18px;
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow-md);
+  text-align:center;
+}
+.incentive-banner .banner-headline{
+  font-size:15px;font-weight:700;color:var(--text);line-height:1.6;
+  letter-spacing:0.5px;
+}
+.incentive-banner .banner-headline em{
+  font-style:normal;color:var(--primary);position:relative;
+}
+.incentive-banner .banner-headline em::after{
+  content:'';position:absolute;bottom:1px;left:0;right:0;height:6px;
+  background:rgba(212,120,110,0.15);border-radius:3px;z-index:-1;
+}
+.incentive-tier-row{
+  display:flex;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap;
+}
+.incentive-tier{
+  flex:1;min-width:80px;max-width:120px;
+  padding:10px 6px;border-radius:var(--radius-sm);
+  background:var(--bg2);text-align:center;
+  transition:transform 0.2s;
+}
+.incentive-tier:active{transform:scale(0.96)}
+.incentive-tier .tier-icon{font-size:22px;margin-bottom:2px}
+.incentive-tier .tier-amount{font-size:18px;font-weight:800;color:var(--primary-dark);line-height:1.2}
+.incentive-tier .tier-label{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.4}
+
+/* ============ CONTENT AREA ============ */
+.main{padding:0 20px 48px;max-width:480px;margin:0 auto}
+
+/* Section header */
+.section-header{text-align:center;padding:24px 0 8px}
+.section-header .plan-name{
+  font-size:20px;font-weight:700;letter-spacing:4px;color:var(--text);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.section-header .plan-name .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.section-header .tagline{font-size:12px;color:var(--text3);margin-top:4px;letter-spacing:1px}
+
+/* Step indicator */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;padding:16px 0 24px}
+.step-item{display:flex;align-items:center;gap:6px}
+.step-num{
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;border:2px solid var(--border);color:var(--text3);
+  background:var(--card);transition:all 0.3s;
+}
+.step-item.active .step-num{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(212,120,110,0.3)}
+.step-item.done .step-num{background:var(--success);border-color:var(--success);color:#fff}
+.step-label{font-size:11px;color:var(--text3);display:none}
+.step-line{width:28px;height:1px;background:var(--border);margin:0 6px;transition:background 0.3s}
+.step-item.done+.step-line{background:var(--success)}
+
+/* ============ STEP 1: TEMPLATE ============ */
+.step-panel{display:none}
+.step-panel.active{display:block}
+.template-grid{display:flex;flex-direction:column;gap:12px}
+.template-card{
+  background:var(--card);border-radius:var(--radius);padding:20px 18px;
+  box-shadow:var(--shadow-sm);border:1.5px solid var(--border-light);cursor:pointer;
+  transition:all 0.25s;display:flex;align-items:center;gap:16px;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+  position:relative;overflow:hidden;
+}
+.template-card::before{
+  content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;
+  border-radius:0 3px 3px 0;background:var(--border-light);
+  transition:all 0.25s;
+}
+.template-card:hover{box-shadow:var(--shadow)}
+.template-card:active{transform:scale(0.985)}
+.template-card.selected{
+  border-color:var(--primary-light);box-shadow:var(--shadow-md);
+  background:linear-gradient(135deg,#fff 0%,rgba(212,120,110,0.03) 100%);
+}
+.template-card.selected::before{background:var(--primary);width:4px}
+.template-emoji{font-size:40px;line-height:1;flex-shrink:0}
+.template-info{flex:1;min-width:0}
+.template-name{font-size:16px;font-weight:600;color:var(--text)}
+.template-desc{font-size:13px;color:var(--text2);margin-top:3px}
+.template-meta{font-size:11px;color:var(--text3);margin-top:6px;display:flex;gap:14px;align-items:center}
+.template-badge{
+  font-size:11px;padding:3px 10px;border-radius:12px;
+  background:rgba(212,120,110,0.08);color:var(--primary-dark);white-space:nowrap;
+  font-weight:500;
+}
+
+.btn-primary{
+  display:block;width:100%;margin-top:18px;padding:15px;border:none;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+  color:#fff;font-size:16px;font-weight:600;cursor:pointer;
+  transition:all 0.2s;letter-spacing:2px;
+  box-shadow:0 4px 14px rgba(212,120,110,0.25);
+}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;box-shadow:none}
+.btn-primary:not(:disabled):active{transform:scale(0.97);box-shadow:0 2px 8px rgba(212,120,110,0.2)}
+
+/* ============ STEP 2: UPLOAD ============ */
+.upload-header{text-align:center;margin-bottom:18px}
+.upload-header .selected-tpl{font-size:14px;color:var(--text2)}
+.upload-header .selected-tpl strong{color:var(--text);font-weight:600}
+.upload-slots{display:flex;flex-direction:column;gap:14px}
+.upload-slot{
+  border:2px dashed var(--border);border-radius:var(--radius);padding:32px 20px;
+  text-align:center;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;
+  background:var(--card);
+}
+.upload-slot:hover{border-color:var(--primary-light);background:rgba(212,120,110,0.02)}
+.upload-slot:active{border-color:var(--primary);background:rgba(212,120,110,0.05)}
+.upload-slot.filled{
+  border-style:solid;border-color:var(--success);
+  background:linear-gradient(135deg,rgba(122,154,110,0.04),rgba(122,154,110,0.02));
+}
+.upload-slot .slot-icon{font-size:36px;margin-bottom:8px;transition:transform 0.3s}
+.upload-slot.filled .slot-icon{transform:scale(1.1)}
+.upload-slot .slot-label{font-size:15px;font-weight:600;color:var(--text)}
+.upload-slot .slot-tip{font-size:12px;color:var(--text3);margin-top:4px;line-height:1.5}
+.upload-slot .slot-status{font-size:13px;color:var(--success);margin-top:8px;display:none;font-weight:500}
+.upload-slot.filled .slot-status{display:block}
+.upload-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.progress-bar{
+  width:100%;height:4px;background:var(--border-light);border-radius:2px;margin-top:12px;overflow:hidden;display:none;
+}
+.progress-bar.active{display:block}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--primary-light),var(--primary));border-radius:2px;transition:width 0.3s;width:0%}
+
+/* ============ STEP 3: PROCESSING ============ */
+.processing-panel{text-align:center;padding:48px 20px}
+.spinner-container{position:relative;width:72px;height:72px;margin:0 auto 24px}
+.spinner{
+  width:72px;height:72px;border:3px solid var(--border-light);
+  border-top-color:var(--primary);border-right-color:var(--primary-light);
+  border-radius:50%;animation:spin 1s linear infinite;
+}
+.spinner-inner{
+  position:absolute;inset:14px;border-radius:50%;
+  border:2px solid var(--border-light);
+  border-bottom-color:var(--accent);border-left-color:var(--accent-light);
+  animation:spin 1.5s linear infinite reverse;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.processing-text{font-size:17px;font-weight:600;color:var(--text);letter-spacing:1px}
+.processing-sub{font-size:13px;color:var(--text3);margin-top:8px}
+
+/* ============ STEP 4: DOWNLOAD ============ */
+.result-panel{text-align:center}
+.result-panel .done-icon{font-size:52px;margin-bottom:10px}
+.result-panel .result-title{font-size:19px;font-weight:700;color:var(--text);letter-spacing:1px}
+.result-panel video{width:100%;border-radius:var(--radius);margin:18px 0;box-shadow:var(--shadow-lg)}
+.btn-download{
+  display:block;width:100%;padding:15px;border:none;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+  color:#fff;font-size:16px;font-weight:600;cursor:pointer;
+  letter-spacing:2px;text-align:center;text-decoration:none;transition:all 0.2s;
+  box-shadow:0 4px 14px rgba(212,120,110,0.25);
+}
+.btn-download:active{transform:scale(0.97);box-shadow:0 2px 8px rgba(212,120,110,0.2)}
+
+/* Caption box */
+.caption-box{margin-top:18px;text-align:left}
+.caption-label{
+  font-size:12px;color:var(--text3);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.caption-label .lock{font-size:10px;color:var(--text3)}
+.caption-textarea{
+  width:100%;min-height:80px;padding:14px;border:1.5px solid var(--border-light);
+  border-radius:var(--radius-sm);font-size:13px;color:var(--text);
+  background:var(--bg2);resize:none;line-height:1.8;font-family:inherit;
+}
+.btn-copy{
+  margin-top:10px;padding:10px 24px;border:1.5px solid var(--border);
+  border-radius:24px;background:var(--card);color:var(--text);font-size:13px;
+  cursor:pointer;transition:all 0.2s;font-weight:500;
+}
+.btn-copy:active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ============ REWARD CARD (Step 4) ============ */
+.reward-card{
+  margin-top:24px;padding:20px 18px;
+  background:linear-gradient(145deg,#fffdf8 0%,#fff 100%);
+  border:1.5px solid var(--accent-light);
+  border-radius:var(--radius);box-shadow:var(--shadow-sm);
+}
+.reward-card .reward-headline{
+  font-size:15px;font-weight:700;color:var(--text);text-align:center;
+  line-height:1.6;letter-spacing:0.5px;
+}
+.reward-card .reward-headline em{
+  font-style:normal;color:var(--primary);
+  background:linear-gradient(180deg,transparent 60%,rgba(212,120,110,0.15) 60%);
+  padding:0 2px;
+}
+.reward-tiers{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.reward-tier{
+  display:flex;align-items:center;gap:12px;padding:10px 14px;
+  border-radius:var(--radius-sm);background:rgba(255,255,255,0.8);
+  transition:transform 0.2s;
+}
+.reward-tier .rt-icon{
+  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.reward-tier:nth-child(1) .rt-icon{background:linear-gradient(135deg,#fef3e0,#fde8c8)}
+.reward-tier:nth-child(2) .rt-icon{background:linear-gradient(135deg,#ffe8e4,#ffd5cf)}
+.reward-tier:nth-child(3) .rt-icon{background:linear-gradient(135deg,#f0e6f6,#e4d4f0)}
+.reward-tier .rt-content{flex:1;min-width:0}
+.reward-tier .rt-title{font-size:14px;font-weight:600;color:var(--text)}
+.reward-tier .rt-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.reward-tier .rt-amount{font-size:20px;font-weight:800;color:var(--accent);flex-shrink:0}
+
+/* Divider */
+.divider{display:flex;align-items:center;gap:10px;margin:20px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border-light)}
+.divider .divider-dot{width:4px;height:4px;border-radius:50%;background:var(--accent-light)}
+
+/* ============ TOAST ============ */
+.toast{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:999;
+  padding:12px 28px;background:var(--text);color:#fff;font-size:13px;border-radius:24px;
+  opacity:0;transition:opacity 0.3s;pointer-events:none;
+  box-shadow:0 4px 16px rgba(0,0,0,0.15);font-weight:500;
+}
+.toast.show{opacity:1}
+.toast.success{background:var(--success)}
+.toast.error{background:var(--error)}
+
+/* ============ PROGRESS OVERLAY ============ */
+.uploading-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;
+  display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.uploading-overlay.active{display:flex}
+.uploading-overlay .card{
+  background:var(--card);border-radius:var(--radius);padding:28px 32px;text-align:center;
+  box-shadow:var(--shadow-lg);
+}
+.uploading-overlay .card .pct{font-size:40px;font-weight:700;color:var(--primary)}
+.uploading-overlay .card .pct-label{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* ============ RESPONSIVE ============ */
+@media(min-width:768px){
+  .template-grid{flex-direction:row;flex-wrap:wrap}
+  .template-card{flex:1;min-width:200px;flex-direction:column;text-align:center;padding:28px 18px}
+  .template-card::before{display:none}
+  .template-emoji{font-size:48px}
+  .incentive-tier-row{gap:10px}
+}@-ms-viewport{width:device-width}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <img src="/daka/img/1_poster_web.jpg" alt="芸山杉 · 滇式西餐融合菜">
+  <div class="hero-overlay"></div>
+  <div class="hero-badge">📸 到店打卡</div>
+</section>
+
+<!-- ============ INCENTIVE BANNER ============ -->
+<div class="incentive-banner">
+  <div class="banner-headline">
+    你的视频，不止分享<em>「美」</em><br>——还可以<em>「变现」</em>
+  </div>
+  <div class="incentive-tier-row">
+    <div class="incentive-tier">
+      <div class="tier-icon">💰</div>
+      <div class="tier-amount">¥8</div>
+      <div class="tier-label">发布即得<br>现金立返</div>
+    </div>
+    <div class="incentive-tier">
+      <div class="tier-icon">🔥</div>
+      <div class="tier-amount">¥12</div>
+      <div class="tier-label">50赞/互动<br>7日追加</div>
+    </div>
+    <div class="incentive-tier">
+      <div class="tier-icon">👑</div>
+      <div class="tier-amount">5%</div>
+      <div class="tier-label">链接购买<br>持续提成</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+  <!-- Header -->
+  <div class="section-header">
+    <div class="plan-name"><span class="dot"></span>出片计划<span class="dot"></span></div>
+    <p class="tagline" id="store-tagline">滇式融合菜 · 你的精致出片地</p>
+  </div>
+
+  <!-- Step indicator -->
+  <div class="steps" id="steps-indicator">
+    <div class="step-item active" data-step="1"><span class="step-num">1</span><span class="step-label">选模板</span></div>
+    <span class="step-line"></span>
+    <div class="step-item" data-step="2"><span class="step-num">2</span><span class="step-label">拍素材</span></div>
+    <span class="step-line"></span>
+    <div class="step-item" data-step="3"><span class="step-num">3</span><span class="step-label">AI出片</span></div>
+    <span class="step-line"></span>
+    <div class="step-item" data-step="4"><span class="step-num">4</span><span class="step-label">下载发布</span></div>
+  </div>
+
+  <!-- Step 1: Template -->
+  <div class="step-panel active" id="panel-template">
+    <div class="template-grid" id="template-list"></div>
+    <button class="btn-primary" id="btn-confirm-template" disabled>确认选择 · 开始拍摄 →</button>
+  </div>
+
+  <!-- Step 2: Upload -->
+  <div class="step-panel" id="panel-upload">
+    <div class="upload-header">
+      <p class="selected-tpl">已选模板：<strong id="selected-tpl-name"></strong></p>
+    </div>
+    <div class="upload-slots" id="upload-slots"></div>
+    <button class="btn-primary" id="btn-start-merge" disabled style="margin-top:18px">提交素材 · AI自动出片 ✨</button>
+  </div>
+
+  <!-- Step 3: Processing -->
+  <div class="step-panel" id="panel-processing">
+    <div class="processing-panel">
+      <div class="spinner-container">
+        <div class="spinner"></div>
+        <div class="spinner-inner"></div>
+      </div>
+      <p class="processing-text">AI 正在为你剪辑...</p>
+      <p class="processing-sub" id="processing-sub">正在拼接素材，预计1-2分钟</p>
+    </div>
+  </div>
+
+  <!-- Step 4: Download -->
+  <div class="step-panel" id="panel-download">
+    <div class="result-panel">
+      <div class="done-icon">✨</div>
+      <p class="result-title">你的专属大片已就绪</p>
+      <video id="result-video" controls playsinline preload="metadata"></video>
+      <a class="btn-download" id="btn-download" download>💾 下载视频</a>
+
+      <div class="divider"><span class="divider-dot"></span></div>
+
+      <div class="caption-box">
+        <div class="caption-label">📋 发布文案 <span class="lock">（已编辑好 · 一键复制）</span></div>
+        <textarea class="caption-textarea" id="caption-text" readonly></textarea>
+        <button class="btn-copy" id="btn-copy">📋 复制文案</button>
+      </div>
+
+      <div class="divider"><span class="divider-dot"></span></div>
+
+      <!-- Reward Card -->
+      <div class="reward-card">
+        <div class="reward-headline">
+          你的视频，不止分享<em>「美」</em><br>——还可以<em>「变现」</em>
+        </div>
+        <div class="reward-tiers">
+          <div class="reward-tier">
+            <div class="rt-icon">💰</div>
+            <div class="rt-content">
+              <div class="rt-title">发布即得 · 现金立返</div>
+              <div class="rt-sub">发布小红书/抖音后截图给服务员</div>
+            </div>
+            <div class="rt-amount">¥8</div>
+          </div>
+          <div class="reward-tier">
+            <div class="rt-icon">🔥</div>
+            <div class="rt-content">
+              <div class="rt-title">50条赞/互动 · 7日追加</div>
+              <div class="rt-sub">视频保持7天且互动达标，再领</div>
+            </div>
+            <div class="rt-amount">¥12</div>
+          </div>
+          <div class="reward-tier">
+            <div class="rt-icon">👑</div>
+            <div class="rt-content">
+              <div class="rt-title">顾客通过链接购买 · 持续提成</div>
+              <div class="rt-sub">你的专属链接，别人下单你赚钱</div>
+            </div>
+            <div class="rt-amount">5%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<!-- ============ UPLOAD OVERLAY ============ -->
+<div class="uploading-overlay" id="uploading-overlay">
+  <div class="card">
+    <div class="pct" id="upload-pct">0%</div>
+    <div class="pct-label">上传中...</div>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+const API = '/daka/api/daka';
+const STORE = 'yunshanshan';
+let state = {
+  store: null,
+  templates: [],
+  selectedTemplate: null,
+  customerId: '',
+  uploadedSegments: {},
+  mergeDone: false,
+};
+
+state.customerId = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+
+// ============ INIT ============
+async function init() {
+  try {
+    const [storeRes, tplRes] = await Promise.all([
+      fetch(`${API}/store?store=${STORE}`),
+      fetch(`${API}/templates?store=${STORE}`)
+    ]);
+    const storeData = await storeRes.json();
+    const tplData = await tplRes.json();
+    
+    state.store = storeData.store;
+    state.templates = tplData.templates;
+    
+    applyStoreData(state.store);
+    renderTemplates();
+  } catch(e) {
+    console.error('Init failed:', e);
+    showToast('加载失败，请刷新页面', 'error');
+  }
+}
+
+function applyStoreData(store) {
+  if (!store) return;
+  
+  // Colors
+  const c = store.colors || {};
+  const root = document.documentElement.style;
+  if (c.primary) { root.setProperty('--primary', c.primary); root.setProperty('--primary-dark', darken(c.primary, 0.85)); root.setProperty('--primary-light', lighten(c.primary, 0.25)); }
+  if (c.bg) root.setProperty('--bg', c.bg);
+  if (c.accent) root.setProperty('--accent', c.accent);
+  if (c.gold) root.setProperty('--accent', c.gold);
+  
+  // Tagline
+  const tagline = store.tagline || '滇式融合菜 · 你的精致出片地';
+  document.getElementById('store-tagline').textContent = tagline;
+  
+  // Incentives - update banner and reward card amounts
+  const inc = store.incentives || {};
+  const rebate = inc.instant_rebate || '8';
+  const bonus = inc.engagement_bonus || '12';
+  const threshold = inc.engagement_threshold || 50;
+  const commission = inc.referral_commission || 5;
+  
+  // Update incentive banner
+  const bannerTiers = document.querySelectorAll('.incentive-tier .tier-amount');
+  if (bannerTiers[0]) bannerTiers[0].textContent = '¥' + rebate;
+  if (bannerTiers[1]) bannerTiers[1].textContent = '¥' + bonus;
+  if (bannerTiers[2]) bannerTiers[2].textContent = commission + '%';
+  
+  const bannerSubs = document.querySelectorAll('.incentive-tier .tier-label');
+  if (bannerSubs[1]) bannerSubs[1].innerHTML = threshold + '赞/互动<br>7日追加';
+  
+  // Update reward card amounts
+  const rewardAmounts = document.querySelectorAll('.reward-tier .rt-amount');
+  if (rewardAmounts[0]) rewardAmounts[0].textContent = '¥' + rebate;
+  if (rewardAmounts[1]) rewardAmounts[1].textContent = '¥' + bonus;
+  if (rewardAmounts[2]) rewardAmounts[2].textContent = commission + '%';
+  
+  const rewardSubs = document.querySelectorAll('.reward-tier .rt-sub');
+  if (rewardSubs[1]) rewardSubs[1].textContent = '视频保持7天且互动达标(' + threshold + '赞/互动)，再领';
+}
+
+function darken(hex, factor) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return '#' + [r,g,b].map(v => Math.round(v*factor).toString(16).padStart(2,'0')).join('');
+}
+
+function lighten(hex, factor) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return '#' + [r,g,b].map(v => Math.min(255, Math.round(v + (255-v)*factor)).toString(16).padStart(2,'0')).join('');
+}
+
+// ============ STEP 1: TEMPLATES ============
+function renderTemplates() {
+  const container = document.getElementById('template-list');
+  container.innerHTML = state.templates.map(t => `
+    <div class="template-card" data-id="${t.id}" onclick="selectTemplate('${t.id}')">
+      <div class="template-emoji">${t.emoji}</div>
+      <div class="template-info">
+        <div class="template-name">${t.name}</div>
+        <div class="template-desc">${t.desc}</div>
+        <div class="template-meta">
+          <span>${t.duration}</span>
+          <span>${t.segments.length}个片段</span>
+        </div>
+      </div>
+      <div class="template-badge">${t.segments.length}段拍摄</div>
+    </div>
+  `).join('');
+}
+
+function selectTemplate(id) {
+  state.selectedTemplate = state.templates.find(t => t.id === id);
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`.template-card[data-id="${id}"]`)?.classList.add('selected');
+  document.getElementById('btn-confirm-template').disabled = false;
+}
+
+document.getElementById('btn-confirm-template').addEventListener('click', () => {
+  if (!state.selectedTemplate) return;
+  document.getElementById('selected-tpl-name').textContent = state.selectedTemplate.name;
+  renderUploadSlots();
+  switchStep(2);
+});
+
+// ============ STEP 2: UPLOAD ============
+function renderUploadSlots() {
+  const container = document.getElementById('upload-slots');
+  const tpl = state.selectedTemplate;
+  state.uploadedSegments = {};
+  
+  container.innerHTML = tpl.segments.map(seg => `
+    <div class="upload-slot" id="slot-${seg.id}" onclick="this.querySelector('input').click()">
+      <div class="slot-icon">📹</div>
+      <div class="slot-label">${seg.label} · 片段 ${seg.id}</div>
+      <div class="slot-tip">${seg.tip}</div>
+      <div class="slot-status">✅ 已上传</div>
+      <div class="progress-bar" id="progress-${seg.id}"><div class="fill"></div></div>
+      <input type="file" accept="video/*,.mp4,.mov,.webm" onchange="uploadFile(this, '${seg.id}')">
+    </div>
+  `).join('');
+  
+  updateMergeButton();
+}
+
+async function uploadFile(input, segmentId) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  if (file.size > 200 * 1024 * 1024) {
+    showToast('文件不能超过200MB', 'error');
+    return;
+  }
+  
+  const slot = document.getElementById('slot-' + segmentId);
+  const progressBar = document.getElementById('progress-' + segmentId);
+  const overlay = document.getElementById('uploading-overlay');
+  const pctEl = document.getElementById('upload-pct');
+  
+  overlay.classList.add('active');
+  progressBar.classList.add('active');
+  
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('template', state.selectedTemplate.id);
+  formData.append('segment', segmentId);
+  formData.append('customer_id', state.customerId);
+  formData.append('store', STORE);
+  
+  try {
+    const xhr = new XMLHttpRequest();
+    const result = await new Promise((resolve, reject) => {
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const pct = Math.round(e.loaded / e.total * 100);
+          pctEl.textContent = pct + '%';
+          progressBar.querySelector('.fill').style.width = pct + '%';
+        }
+      });
+      xhr.addEventListener('load', () => {
+        if (xhr.status >= 200 && xhr.status < 300) resolve(JSON.parse(xhr.responseText));
+        else reject(new Error(xhr.status + ' ' + xhr.statusText));
+      });
+      xhr.addEventListener('error', () => reject(new Error('网络错误')));
+      xhr.open('POST', `${API}/upload`);
+      xhr.send(formData);
+    });
+    
+    state.uploadedSegments[segmentId] = result;
+    slot.classList.add('filled');
+    slot.querySelector('.slot-icon').textContent = '✅';
+    showToast(`${segmentId}段上传成功`, 'success');
+  } catch(e) {
+    showToast('上传失败: ' + e.message, 'error');
+    input.value = '';
+  } finally {
+    overlay.classList.remove('active');
+    progressBar.classList.remove('active');
+    updateMergeButton();
+  }
+}
+
+function updateMergeButton() {
+  const tpl = state.selectedTemplate;
+  if (!tpl) return;
+  const allUploaded = tpl.segments.every(s => state.uploadedSegments[s.id]);
+  document.getElementById('btn-start-merge').disabled = !allUploaded;
+}
+
+document.getElementById('btn-start-merge').addEventListener('click', startMerge);
+
+// ============ STEP 3: PROCESSING & MERGE ============
+async function startMerge() {
+  switchStep(3);
+  
+  const formData = new FormData();
+  formData.append('template', state.selectedTemplate.id);
+  formData.append('customer_id', state.customerId);
+  formData.append('store', STORE);
+  
+  try {
+    const res = await fetch(`${API}/merge`, { method: 'POST', body: formData });
+    const data = await res.json();
+    if (data.status === 'error') throw new Error(data.message);
+    
+    pollStatus();
+  } catch(e) {
+    showToast('剪辑失败: ' + e.message, 'error');
+    switchStep(2);
+  }
+}
+
+function pollStatus() {
+  let attempts = 0;
+  const maxAttempts = 60;
+  const subEl = document.getElementById('processing-sub');
+  const messages = [
+    '正在拼接素材，预计1-2分钟',
+    '正在匹配BGM...',
+    '正在添加转场效果...',
+    '即将完成，请稍候 ✨',
+  ];
+  
+  const timer = setInterval(async () => {
+    attempts++;
+    subEl.textContent = messages[Math.min(Math.floor(attempts/8), messages.length-1)];
+    
+    try {
+      const res = await fetch(
+        `${API}/status?customer_id=${state.customerId}&template=${state.selectedTemplate.id}&store=${STORE}`
+      );
+      const data = await res.json();
+      
+      if (data.status === 'done' || data.status === 'ready') {
+        clearInterval(timer);
+        state.mergeDone = true;
+        showResult();
+      } else if (data.status === 'error') {
+        clearInterval(timer);
+        showToast('剪辑出错，请重试', 'error');
+        switchStep(2);
+      }
+    } catch(e) {}
+    
+    if (attempts >= maxAttempts) {
+      clearInterval(timer);
+      showToast('处理超时，请重试', 'error');
+      switchStep(2);
+    }
+  }, 2000);
+}
+
+// ============ STEP 4: DOWNLOAD ============
+async function showResult() {
+  const video = document.getElementById('result-video');
+  const downloadUrl = `${API}/download/${state.customerId}`;
+  video.src = downloadUrl;
+  
+  const btn = document.getElementById('btn-download');
+  btn.href = downloadUrl;
+  
+  try {
+    const res = await fetch(`${API}/caption/${state.selectedTemplate.id}?store=${STORE}`);
+    const data = await res.json();
+    document.getElementById('caption-text').value = data.caption || '';
+  } catch(e) {
+    document.getElementById('caption-text').value = '来芸山杉打卡啦 ✨\n📍呈贡新天地步行街东街H栋2楼\n#昆明美食 #呈贡大学城';
+  }
+  
+  switchStep(4);
+}
+
+document.getElementById('btn-copy').addEventListener('click', () => {
+  const textarea = document.getElementById('caption-text');
+  textarea.select();
+  document.execCommand('copy');
+  showToast('文案已复制！去小红书/抖音粘贴发布吧 ✨', 'success');
+});
+
+// ============ STEP NAVIGATION ============
+function switchStep(step) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + ['','template','upload','processing','download'][step]).classList.add('active');
+  
+  document.querySelectorAll('.step-item').forEach(item => {
+    const s = parseInt(item.dataset.step);
+    item.classList.remove('active','done');
+    if (s === step) item.classList.add('active');
+    if (s < step) item.classList.add('done');
+  });
+  
+  window.scrollTo({ top: 180, behavior: 'smooth' });
+}
+
+// ============ TOAST ============
+function showToast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + (type || '');
+  setTimeout(() => el.classList.add('show'), 10);
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ============ START ============
+init();
+</script>
+</body>
+</html>
